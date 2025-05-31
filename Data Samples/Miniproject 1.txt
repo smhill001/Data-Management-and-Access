@@ -1,0 +1,7 @@
+Under /Data Samples, the catalog of observing keys has been uploaded as both a *.JSON and a *.CSV. For each observation key, the JSON contains the L1B *.PNG file names needed to generate L2 and L3 files. Also included are metadata like the telescope used, etc. 
+
+1) Write a code that reads the JSON file and returns the L1B filenames and the metadata when queried with an obskey.
+
+2) Improve the code by returning L2 and L3 filenames (*.FITS and *.PNG) in addition to the L1B file names. The file names can be constructed using the date-time string in each L1B file plus additional string characters as defined in the aareadme_L2.txt and aareadme_L3.txt
+
+It's your choice to write OO code or procedural/functional code. Whatever you feel is easiest or best.
