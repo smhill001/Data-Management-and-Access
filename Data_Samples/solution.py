@@ -10,7 +10,7 @@ def formatLB(ch, nh, rgb):
 def formatLTwo(prefix):
      obj = {}
      obj['TCH4'] = prefix + "L2TCH4.fits"
-     obj['TNH3'] = prefix + "L2NH3.fits"
+     obj['TNH3'] = prefix + "L2TNH3.fits"
      obj['CLSL'] = prefix + "L2CLSL.fits"
      return obj
      
@@ -30,7 +30,7 @@ def get_info(obskey, data):
     obj['L1B'] = formatLB(ch, nh, rgb)
     obj['L2'] = formatLTwo(prefix)
     obj['L3'] = formatLThree(prefix)
-    cleanObj(obsData)
+    #cleanObj(obsData)
     return obj
 
 def cleanObj(data):
@@ -38,7 +38,8 @@ def cleanObj(data):
     data.pop('NH3file')
     data.pop('RGBfile')
 
-with open('Data_Samples/Catalog.json') as f:
+with open('Catalog.json') as f:
     d = json.load(f)
-    print(get_info("20200720UTa", d))
+    print(get_info("20250106UTa", d))
+    outobj=get_info("20250106UTa", d)
 
