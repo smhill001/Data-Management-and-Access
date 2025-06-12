@@ -20,6 +20,15 @@ def formatLThree(prefix):
      obj['fNH3'] = prefix + "L3fNH3_S0.fits"
      return obj
 
+def getByTelescope(file, telescope):
+    filtered= []
+    for key in file:
+        
+        if ('Telescope' in file[key]) and file[key]['Telescope'] == telescope:
+            
+            filtered.append(key)
+    return filtered
+
 def get_info(obskey, data):
     obsData = data[obskey]
     ch = obsData['CH4file']
@@ -38,7 +47,12 @@ def cleanObj(data):
     data.pop('NH3file')
     data.pop('RGBfile')
 
+
+
 with open('Data_Samples/Catalog.json') as f:
     d = json.load(f)
+    
+    for tele in getByTelescope(d, 'C11'):
+        print(d[tele]['Telescope'])
     print(get_info("20200720UTa", d))
 
