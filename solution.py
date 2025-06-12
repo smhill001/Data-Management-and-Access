@@ -30,7 +30,7 @@ def get_info(obskey, data):
     obj['L1B'] = formatLB(ch, nh, rgb)
     obj['L2'] = formatLTwo(prefix)
     obj['L3'] = formatLThree(prefix)
-    cleanObj(obsData)
+    #cleanObj(obsData)
     return obj
 
 def cleanObj(data):
