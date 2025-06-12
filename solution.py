@@ -10,7 +10,7 @@ def formatLB(ch, nh, rgb):
 def formatLTwo(prefix):
      obj = {}
      obj['TCH4'] = prefix + "L2TCH4.fits"
-     obj['TNH3'] = prefix + "L2NH3.fits"
+     obj['TNH3'] = prefix + "L2TNH3.fits"
      obj['CLSL'] = prefix + "L2CLSL.fits"
      return obj
      
