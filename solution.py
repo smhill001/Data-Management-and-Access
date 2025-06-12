@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 
 def formatLB(ch, nh, rgb):
     obj = {}
@@ -23,11 +25,25 @@ def formatLThree(prefix):
 def getByTelescope(file, telescope):
     filtered= []
     for key in file:
-        
         if ('Telescope' in file[key]) and file[key]['Telescope'] == telescope:
-            
             filtered.append(key)
     return filtered
+
+def getBetweenDates(file, startDate, endDate):
+    filtered = []
+    for key,value in file.items():
+      
+        startDateTime = datetime.fromisoformat(startDate)
+        endDateTime = datetime.fromisoformat(endDate)
+        date = datetime.fromisoformat(value['NH3file'][:15])
+        if(min(date, startDateTime) == startDateTime and 
+           max(date,endDateTime) == endDateTime):
+           
+            filtered.append(key)
+    
+    return filtered
+        
+
 
 def get_info(obskey, data):
     obsData = data[obskey]
@@ -52,7 +68,6 @@ def cleanObj(data):
 with open('Data_Samples/Catalog.json') as f:
     d = json.load(f)
     
-    for tele in getByTelescope(d, 'C11'):
-        print(d[tele]['Telescope'])
+    print(getBetweenDates(d, '2024-12-03-0228', '2025-01-10'))
     print(get_info("20200720UTa", d))
 
