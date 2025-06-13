@@ -32,14 +32,24 @@ def getByTelescope(file, telescope):
 def getBetweenDates(file, startDate, endDate):
     filtered = []
     for key,value in file.items():
-      
-        startDateTime = datetime.fromisoformat(startDate)
-        endDateTime = datetime.fromisoformat(endDate)
-        date = datetime.fromisoformat(value['NH3file'][:15])
-        if(min(date, startDateTime) == startDateTime and 
-           max(date,endDateTime) == endDateTime):
-           
-            filtered.append(key)
+         date = datetime.fromisoformat(value['NH3file'][:15])
+         if startDate == 0:
+            endDateTime = datetime.fromisoformat(endDate)
+            if endDateTime > date:
+                print(value['NH3file'])
+                filtered.append(key)
+         elif endDate == 0:
+            startDateTime = datetime.fromisoformat(startDate)
+            if startDateTime < date:
+                print(value['NH3file'])
+                filtered.append(key)
+         else:
+            startDateTime = datetime.fromisoformat(startDate)
+            endDateTime = datetime.fromisoformat(endDate)
+            if(min(date, startDateTime) == startDateTime and 
+             max(date,endDateTime) == endDateTime):
+                filtered.append(key)
+        
     
     return filtered
         
@@ -68,6 +78,6 @@ def cleanObj(data):
 with open('Data_Samples/Catalog.json') as f:
     d = json.load(f)
     
-    print(getBetweenDates(d, '2024-12-03-0228', '2025-01-10'))
+    print(getBetweenDates(d, '2025-01-10', 0))
     print(get_info("20200720UTa", d))
 
