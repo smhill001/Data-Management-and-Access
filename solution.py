@@ -33,23 +33,22 @@ def isBetweenDates(file, startDate, endDate):
          date = datetime.fromisoformat(file[:15])
          print(file[:15])
          if startDate == 0:
-            endDateTime = datetime.fromisoformat(endDate)
-            if endDateTime > date:
+            endDateTime = datetime.fromisoformat(endDate).replace(hour=23, minute=59)
+            if endDateTime >= date:
                 print(file)
                 return True
          elif endDate == 0:
             startDateTime = datetime.fromisoformat(startDate)
-            if startDateTime < date:
+            if startDateTime <= date:
                 print(file)
                 return True
          else:
             startDateTime = datetime.fromisoformat(startDate)
-            endDateTime = datetime.fromisoformat(endDate)
+            endDateTime = datetime.fromisoformat(endDate).replace(hour=23, minute=59)
             if(min(date, startDateTime) == startDateTime and 
              max(date,endDateTime) == endDateTime):
                 print(file)
                 return True
-         
          return False
 
 
@@ -86,6 +85,6 @@ def cleanObj(data):
 with open('Data_Samples/Catalog.json') as f:
     d = json.load(f)
     
-    print(getNHBetweenDates(d, '2025-01-06', '2025-01-17'))
+    print(getNHBetweenDates(d, '2025-01-06', '2025-01-16'))
     print(get_info("20200720UTa", d))
 
