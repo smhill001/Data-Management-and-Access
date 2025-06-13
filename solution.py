@@ -22,13 +22,15 @@ def formatLThree(prefix):
      obj['fNH3'] = prefix + "L3fNH3_S0.fits"
      return obj
 
+#returns all files with specific telescope
 def getByTelescope(file, telescope):
     filtered= []
     for key in file:
         if ('Telescope' in file[key]) and file[key]['Telescope'] == telescope:
             filtered.append(key)
     return filtered
-
+#checks if date in filename is between dates inclusive, if start or end date is set as zero, 
+#does not make comparison but at least one must be specified
 def isBetweenDates(file, startDate, endDate):
          date = datetime.fromisoformat(file[:15])
          if startDate == 0:
@@ -47,6 +49,7 @@ def isBetweenDates(file, startDate, endDate):
                 return True
          return False
 
+#returns all files where RGB, CH4, and NH3 in specified date range
 def getAllBetweenDates(data, startDate, endDate):
     filtered = []
     for key,value in data.items():
@@ -55,12 +58,9 @@ def getAllBetweenDates(data, startDate, endDate):
          if (isBetweenDates(value['RGBfile'], startDate, endDate) and
             isBetweenDates(value['NH3file'], startDate, endDate) and
             isBetweenDates(value['CH4file'], startDate, endDate)):
-                print(value['CH4file'])
-                print(value['RGBfile'])
-                print(value['NH3file'])
                 filtered.append(key)
     return filtered
-
+#returns all files where NH3 in date range
 def getNHBetweenDates(data, startDate, endDate):
     filtered = []
     for key,value in data.items():
@@ -71,7 +71,7 @@ def getNHBetweenDates(data, startDate, endDate):
     return filtered
         
 
-
+#returns object with metadata, LB, L2, and L3 file names
 def get_info(obskey, data):
     obsData = data[obskey]
     ch = obsData['CH4file']
@@ -84,6 +84,7 @@ def get_info(obskey, data):
     obj['L3'] = formatLThree(prefix)
     #cleanObj(obsData)
     return obj
+
 
 def cleanObj(data):
     data.pop('CH4file')
