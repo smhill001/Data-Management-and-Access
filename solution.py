@@ -95,7 +95,11 @@ def cleanObj(data):
 
 with open('Data_Samples/Catalog.json') as f:
     d = json.load(f)
-    
-    print(getAllBetweenDates(d, '2025-01-06', '2025-01-16'))
-    print(get_info("20200720UTa", d))
+    print()
+    print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")
+    print()
+    print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
+    print()
+    print("get_info('20200720UTa', d)")
+    print(get_info('20200720UTa', d))
 
