@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 
 
@@ -90,16 +91,64 @@ def cleanObj(data):
     data.pop('CH4file')
     data.pop('NH3file')
     data.pop('RGBfile')
+#collection count mismatch
+def sortIntoCollections(files, collectionSize):
+    obj = []
+    for i in range(0, len(files) - collectionSize - 1, 10):
+        obj.append(files[i:i+collectionSize])
+    return obj
+    
+def labelCollections(collections):
+    labeledCollection = {}
+    for index, collection in enumerate(collections):
+        label = collection[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
+        labeledCollection[label] = collection
+    return labeledCollection
+
+def getCollections(files):
+    sortedFiles = sortFilesByDate(getLAFiles(files))
+    collections = sortIntoCollections(sortedFiles, 10)
+    print(len(collections))
+    labeledCollections = labelCollections(collections)
+    print(labeledCollections)
+
+#figure out which files
+#get eleventh file in
+def getLAFiles(files):
+    selectedFiles = []
+    for file in files:
+        last = file[-16:]
+        if last == 'FlatStack600.png':
+            selectedFiles.append(file)
+    return selectedFiles
+
+def sortFilesByDate(files):
+    files.sort(key=lambda file: datetime.fromisoformat(file[:15]))
+  
+
+    return files
+
+
+  
+ 
+
+
+l1Files = os.listdir("Data-Management-and-Access/Data_Samples/20250116UT")
+getCollections(l1Files)   
 
 
 
-with open('Data_Samples/Catalog.json') as f:
+
+
+with open('Data-Management-and-Access/Data_Samples/Catalog.json') as f:
     d = json.load(f)
+    
     print()
     print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")
     print()
-    print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
+    print(len(getAllBetweenDates(d, '2025-01-16', '2025-01-16')))
     print()
-    print("get_info('20200720UTa', d)")
-    print(get_info('20200720UTa', d))
+    #print("get_info('20200720UTa', d)")
+    #print(get_info('20200720UTa', d))
+    
 
