@@ -121,6 +121,15 @@ def filterObsByDate(data , startDate, endDate):
             filteredData[key] = value
     return filteredData
 
+def filterByKeyword(data, filter):
+    filteredData = {}
+    for key, files in data.items():
+        for file in files:
+            if filter in file:
+                if not key in filteredData: filteredData[key] = []
+                filteredData[key].append(file)
+    return filteredData
+
    
     
 def labelObservations(observations):
@@ -134,7 +143,7 @@ def getObservations(files):
     sortedFiles = sortFilesByDate(getLAFiles(files))
     observations = sortIntoObservations(sortedFiles)
     labeledObservations = labelObservations(observations)
-    print(filterObsByDate(labeledObservations, '2025-01-16-0036', '2025-01-16-0036'))
+    print(filterByFilter(labeledObservations, '656HIA'))
     
 
 #figure out which files
