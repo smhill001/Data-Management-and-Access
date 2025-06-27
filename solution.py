@@ -112,12 +112,16 @@ def sortIntoObservations(files):
             fileOrder.pop()
             i += 1
     return res
-       
-            
 
-    #for i in range(0, len(files) - collectionSize - 1, 10):
-    #    obj.append(files[i:i+collectionSize])
-    #return obj
+#filters by date of first file(HIA)
+def filterObsByDate(data , startDate, endDate):
+    filteredData = {}
+    for key, value in data.items():
+        if isBetweenDates(value[0], startDate, endDate):
+            filteredData[key] = value
+    return filteredData
+
+   
     
 def labelObservations(observations):
     labeledObs = {}
@@ -130,7 +134,8 @@ def getObservations(files):
     sortedFiles = sortFilesByDate(getLAFiles(files))
     observations = sortIntoObservations(sortedFiles)
     labeledObservations = labelObservations(observations)
-    print(labeledObservations.keys())
+    print(filterObsByDate(labeledObservations, '2025-01-16-0036', '2025-01-16-0036'))
+    
 
 #figure out which files
 #get eleventh file in
