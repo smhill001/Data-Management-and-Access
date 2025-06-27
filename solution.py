@@ -91,11 +91,34 @@ def cleanObj(data):
     data.pop('NH3file')
     data.pop('RGBfile')
 #collection count mismatch
-def sortIntoCollections(files, collectionSize):
-    obj = []
-    for i in range(0, len(files) - collectionSize - 1, 10):
-        obj.append(files[i:i+collectionSize])
-    return obj
+#only complete observations?
+#tests
+
+#incomplete observations are added
+#test
+def sortIntoCollections(files):
+    res = []
+    i = 0
+    while i < len(files):
+        obs = []
+        fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
+        
+        while(True):
+            while len(fileOrder) and files[i][26:29] != fileOrder[-1]:
+                fileOrder.pop()
+            if not len(fileOrder):
+                res.append(obs)
+                break
+            obs.append(files[i])
+            fileOrder.pop()
+            i += 1
+    return res
+       
+            
+
+    #for i in range(0, len(files) - collectionSize - 1, 10):
+    #    obj.append(files[i:i+collectionSize])
+    #return obj
     
 def labelCollections(collections):
     labeledCollection = {}
@@ -106,19 +129,18 @@ def labelCollections(collections):
 
 def getCollections(files):
     sortedFiles = sortFilesByDate(getLAFiles(files))
-    collections = sortIntoCollections(sortedFiles, 10)
-    print(len(collections))
+  
+    collections = sortIntoCollections(sortedFiles)
+    print(collections)
     labeledCollections = labelCollections(collections)
-    print(labeledCollections)
+    #print(labeledCollections)
 
 #figure out which files
 #get eleventh file in
 def getLAFiles(files):
     selectedFiles = []
-    
     for file in files:
         last = file[-18:]
-        
         if last == 'CameraSettings.txt':
             selectedFiles.append(file)
     return selectedFiles
@@ -130,8 +152,8 @@ def sortFilesByDate(files):
     return files
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
-print(getLAFiles(l1Files))
-#getCollections(l1Files)   
+
+getCollections(l1Files)   
 
 
 
