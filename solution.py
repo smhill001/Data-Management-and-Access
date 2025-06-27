@@ -2,7 +2,6 @@ import json
 import os
 from datetime import datetime
 
-
 def formatLB(ch, nh, rgb):
     obj = {}
     obj['CH4file'] = (ch + ".png") if ch else ""
@@ -116,9 +115,11 @@ def getCollections(files):
 #get eleventh file in
 def getLAFiles(files):
     selectedFiles = []
+    
     for file in files:
-        last = file[-16:]
-        if last == 'FlatStack600.png':
+        last = file[-18:]
+        
+        if last == 'CameraSettings.txt':
             selectedFiles.append(file)
     return selectedFiles
 
@@ -128,25 +129,22 @@ def sortFilesByDate(files):
 
     return files
 
-
-  
- 
-
-
-l1Files = os.listdir("Data-Management-and-Access/Data_Samples/20250116UT")
-getCollections(l1Files)   
+l1Files = os.listdir("./Data_Samples/20250116UT")
+print(getLAFiles(l1Files))
+#getCollections(l1Files)   
 
 
 
 
 
-with open('Data-Management-and-Access/Data_Samples/Catalog.json') as f:
+with open('./Data-Management-and-Access/Data_Samples/Catalog.json') as f:
     d = json.load(f)
     
     print()
     print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")
     print()
-    print(len(getAllBetweenDates(d, '2025-01-16', '2025-01-16')))
+   
+    #print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
