@@ -96,13 +96,12 @@ def cleanObj(data):
 
 #incomplete observations are added
 #test
-def sortIntoCollections(files):
+def sortIntoObservations(files):
     res = []
     i = 0
     while i < len(files):
         obs = []
         fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
-        
         while(True):
             while len(fileOrder) and files[i][26:29] != fileOrder[-1]:
                 fileOrder.pop()
@@ -120,20 +119,18 @@ def sortIntoCollections(files):
     #    obj.append(files[i:i+collectionSize])
     #return obj
     
-def labelCollections(collections):
-    labeledCollection = {}
-    for index, collection in enumerate(collections):
-        label = collection[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
-        labeledCollection[label] = collection
-    return labeledCollection
+def labelObservations(observations):
+    labeledObs = {}
+    for index, obs in enumerate(observations):
+        label = obs[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
+        labeledObs[label] = obs
+    return labeledObs
 
-def getCollections(files):
+def getObservations(files):
     sortedFiles = sortFilesByDate(getLAFiles(files))
-  
-    collections = sortIntoCollections(sortedFiles)
-    print(collections)
-    labeledCollections = labelCollections(collections)
-    #print(labeledCollections)
+    observations = sortIntoObservations(sortedFiles)
+    labeledObservations = labelObservations(observations)
+    print(labeledObservations.keys())
 
 #figure out which files
 #get eleventh file in
@@ -153,20 +150,20 @@ def sortFilesByDate(files):
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
-getCollections(l1Files)   
+getObservations(l1Files)   
 
 
 
 
 
-with open('./Data-Management-and-Access/Data_Samples/Catalog.json') as f:
+with open('./Data_Samples/Catalog.json') as f:
     d = json.load(f)
     
     print()
     print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")
     print()
    
-    #print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
+    print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
