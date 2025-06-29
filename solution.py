@@ -90,12 +90,7 @@ def cleanObj(data):
     data.pop('CH4file')
     data.pop('NH3file')
     data.pop('RGBfile')
-#collection count mismatch
-#only complete observations?
-#tests
 
-#incomplete observations are added
-#test
 def sortIntoObservations(files):
     res = []
     i = 0
@@ -121,11 +116,11 @@ def filterObsByDate(data , startDate, endDate):
             filteredData[key] = value
     return filteredData
 #looks for word in file name
-def filterByKeyword(data, filter):
+def filterByKeyword(data, keyword):
     filteredData = {}
     for key, files in data.items():
         for file in files:
-            if filter in file:
+            if keyword in file:
                 if not key in filteredData: filteredData[key] = []
                 filteredData[key].append(file)
     return filteredData
