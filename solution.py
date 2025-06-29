@@ -120,7 +120,7 @@ def filterObsByDate(data , startDate, endDate):
         if isBetweenDates(value[0], startDate, endDate):
             filteredData[key] = value
     return filteredData
-
+#looks for word in file name
 def filterByKeyword(data, filter):
     filteredData = {}
     for key, files in data.items():
@@ -131,7 +131,7 @@ def filterByKeyword(data, filter):
     return filteredData
 
    
-    
+#generates obskeys for each observation
 def labelObservations(observations):
     labeledObs = {}
     for index, obs in enumerate(observations):
@@ -143,11 +143,10 @@ def getObservations(files):
     sortedFiles = sortFilesByDate(getLAFiles(files))
     observations = sortIntoObservations(sortedFiles)
     labeledObservations = labelObservations(observations)
-    print(filterByFilter(labeledObservations, '656HIA'))
+    return labeledObservations
     
 
-#figure out which files
-#get eleventh file in
+
 def getLAFiles(files):
     selectedFiles = []
     for file in files:
@@ -158,13 +157,11 @@ def getLAFiles(files):
 
 def sortFilesByDate(files):
     files.sort(key=lambda file: datetime.fromisoformat(file[:15]))
-  
-
     return files
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
-getObservations(l1Files)   
+print(filterByKeyword(getObservations(l1Files), '656HIA'))
 
 
 
