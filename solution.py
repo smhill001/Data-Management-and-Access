@@ -1,6 +1,6 @@
 import json
+import os
 from datetime import datetime
-
 
 def formatLB(ch, nh, rgb):
     obj = {}
@@ -91,15 +91,87 @@ def cleanObj(data):
     data.pop('NH3file')
     data.pop('RGBfile')
 
+def sortIntoObservations(files):
+    res = []
+    i = 0
+    while i < len(files):
+        obs = []
+        fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
+        while(True):
+            while len(fileOrder) and files[i][26:29] != fileOrder[-1]:
+                fileOrder.pop()
+            if not len(fileOrder):
+                res.append(obs)
+                break
+            obs.append(files[i])
+            fileOrder.pop()
+            i += 1
+    return res
+
+#filters by date of first file(HIA)
+def filterObsByDate(data , startDate, endDate):
+    filteredData = {}
+    for key, value in data.items():
+        if isBetweenDates(value[0], startDate, endDate):
+            filteredData[key] = value
+    return filteredData
+#looks for word in file name
+def filterByKeyword(data, keyword):
+    filteredData = {}
+    for key, files in data.items():
+        for file in files:
+            if keyword in file:
+                if not key in filteredData: filteredData[key] = []
+                filteredData[key].append(file)
+    return filteredData
+
+   
+#generates obskeys for each observation
+def labelObservations(observations):
+    labeledObs = {}
+    for index, obs in enumerate(observations):
+        label = obs[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
+        labeledObs[label] = obs
+    return labeledObs
+
+def getObservations(files):
+    sortedFiles = sortFilesByDate(getLAFiles(files))
+    observations = sortIntoObservations(sortedFiles)
+    labeledObservations = labelObservations(observations)
+    return labeledObservations
+    
 
 
-with open('Data_Samples/Catalog.json') as f:
+def getLAFiles(files):
+    selectedFiles = []
+    for file in files:
+        last = file[-18:]
+        if last == 'CameraSettings.txt':
+            selectedFiles.append(file)
+    return selectedFiles
+
+def sortFilesByDate(files):
+    files.sort(key=lambda file: datetime.fromisoformat(file[:15]))
+    return files
+
+l1Files = os.listdir("./Data_Samples/20250116UT")
+
+print(filterByKeyword(getObservations(l1Files), '656HIA'))
+
+
+
+
+
+with open('./Data_Samples/Catalog.json') as f:
     d = json.load(f)
+    
     print()
     print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")
     print()
+   
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
-    print("get_info('20200720UTa', d)")
-    print(get_info('20200720UTa', d))
+    #print("get_info('20200720UTa', d)")
+    #print(get_info('20200720UTa', d))
+    
 
