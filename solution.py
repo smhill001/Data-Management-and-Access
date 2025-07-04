@@ -31,10 +31,19 @@ def getByTelescope(file, telescope):
     return filtered
 #checks if date in filename is between dates inclusive, if start or end date is set as zero, 
 #does not make comparison but at least one must be specified
+def getEndDateTime(endDate):
+    
+    if len(endDate) <= 10:
+        return datetime.fromisoformat(endDate).replace(hour=23, minute=59)
+    else: 
+        print(len(endDate))
+        return datetime.fromisoformat(endDate)
+        
 def isBetweenDates(file, startDate, endDate):
          date = datetime.fromisoformat(file[:15])
+         
          if startDate == 0:
-            endDateTime = datetime.fromisoformat(endDate).replace(hour=23, minute=59)
+            endDateTime = getEndDateTime(endDate)
             if endDateTime >= date:
                 return True
          elif endDate == 0:
@@ -43,7 +52,7 @@ def isBetweenDates(file, startDate, endDate):
                 return True
          else:
             startDateTime = datetime.fromisoformat(startDate)
-            endDateTime = datetime.fromisoformat(endDate).replace(hour=23, minute=59)
+            endDateTime = getEndDateTime(endDate)
             if(min(date, startDateTime) == startDateTime and 
              max(date,endDateTime) == endDateTime):
                 return True
@@ -157,9 +166,6 @@ def sortFilesByDate(files):
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
 print(filterByKeyword(getObservations(l1Files), '656HIA'))
-
-
-
 
 
 with open('./Data_Samples/Catalog.json') as f:
