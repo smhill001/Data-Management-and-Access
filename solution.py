@@ -36,7 +36,6 @@ def getEndDateTime(endDate):
     if len(endDate) <= 10:
         return datetime.fromisoformat(endDate).replace(hour=23, minute=59)
     else: 
-        print(len(endDate))
         return datetime.fromisoformat(endDate)
         
 def isBetweenDates(file, startDate, endDate):
