@@ -1,0 +1,15 @@
+Terrific work on Project 3!
+
+Let's now proceed to getting to some more serious work with the metadata in preparation for working with the data. There are three goals:
+
+1) Persist the output of getObservations(l1Files) as a JSON file, that then can be read and operated upon by the filters and other routines. This will reduce the need to scan the file system each time we want to assess metadata. I will run this against the entirety of the data set from 2022-2025 and then incorporate it into our repo. Think about error handling here. In the huge number of files I have, surely some are missing. The program should at least print an error message if, for instance, there are only 10 files out of the 11 expected for an observation. What other kinds of errors could there be?
+
+2) Create a histogram-style plot (matplotlib.pyplot.step) of the number of observations (obskeys) per UT day for a given year. You'll use the JSON from the entire dataset to do this. This will likely make it into at least one of my upcoming talks.
+
+3) Identify the L1A PNG files necessary for processing from the CameraSettings.txt files. They'll have the same prefix up to "CameraSettings.txt". However, for the science files you'll need to find files that include the substrings "FlatStack", "Aligned", but NOT "WV". For the context files, you'll need to find those files with "FlatStack", "Aligned", AND "WV".
+
+The next steps will be to download and install PlanetMapper:
+
+	https://planetmapper.readthedocs.io/en/latest/index.html.
+
+This is professional scientific code used for the study of Jupiter and other planets. It turns pictures into data with longitude and latitude associated with each pixel, along with other important parameters. You'll need some Jupiter specific files for this. When you've finished the above items, we'll talk about the steps to do this. 
