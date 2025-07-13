@@ -1,6 +1,10 @@
 import json
 import os
 from datetime import datetime
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
+
 
 def formatLB(ch, nh, rgb):
     obj = {}
@@ -162,11 +166,48 @@ def sortFilesByDate(files):
     files.sort(key=lambda file: datetime.fromisoformat(file[:15]))
     return files
 
+
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
 with open('./observations.json', 'w', encoding='utf-8') as f:
     json.dump(getObservations(l1Files), f, ensure_ascii=False, indent=4)
 
+def createDatesArray(keys, year = None):
+    dateData = []
+    print(len(keys))
+    for key in keys:
+        if (not year) or year == key[:4]:
+            dateData.append(mdates.datestr2num(key[:8]))
+    return dateData
+
+def createYearsHistogram(data):  
+    dates = createDatesArray(list(data.keys()))
+    fig, ax = plt.subplots(1,1)
+    ax.hist(dates, bins=70, color='blue')
+    #
+    #ax.set_xticks(selected_dates)
+    #ax.set_xticklabels(labels)
+    #
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('20%y'))
+    plt.xlabel("Year")
+    plt.ylabel("Observations")
+    plt.show()
+
+def createHistogram(data, year): 
+    dates = createDatesArray(list(data.keys()), year)
+    fig, ax = plt.subplots(1,1)
+    ax.hist(dates, bins=365, color='blue')
+    #
+    #ax.set_xticks(selected_dates)
+    #ax.set_xticklabels(labels)
+    #
+    ax.xaxis.set_major_locator(mdates.DayLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter(''))
+    plt.xlabel("Year")
+    plt.ylabel("Observations")
+    plt.show()
+    
 
 
 
@@ -179,7 +220,12 @@ with open('./Data_Samples/Catalog.json') as f:
    
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
+    #print(createDatesArray(list(d.keys())))
+    createHistogram(d, 2025)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
+
+
+
 

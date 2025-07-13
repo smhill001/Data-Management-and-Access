@@ -30,6 +30,13 @@ labeledobsref=['2025-01-16-0117_8-Jupiter_656HIA.CameraSettings.txt',
                '2025-01-16-0135_4-Jupiter_550GRN.CameraSettings.txt', 
                '2025-01-16-0136_9-Jupiter_450BLU.CameraSettings.txt']
 
+superfilterref={'20250116UTm': ['2025-01-16-0502_2-Jupiter_656HIA.CameraSettings.txt', 
+                                '2025-01-16-0516_4-Jupiter_656HIA.CameraSettings.txt'], 
+                '20250116UTn': ['2025-01-16-0523_1-Jupiter_656HIA.CameraSettings.txt', 
+                                '2025-01-16-0537_3-Jupiter_656HIA.CameraSettings.txt'], 
+                '20250116UTo': ['2025-01-16-0544_0-Jupiter_656HIA.CameraSettings.txt', 
+                                '2025-01-16-0558_3-Jupiter_656HIA.CameraSettings.txt']}
+
 with open('./Data_Samples/Catalog.json') as f:
     d = json.load(f)
     
@@ -50,22 +57,46 @@ l1Files = os.listdir("./Data_Samples/20250116UT")
 fwkw=s.filterByKeyword(s.getObservations(l1Files), '656HIA')
 if len(fwkw) == H1Akeywordcount:
     print("PASS")
-    print()
+else:
+    print("FAIL")
+print()
 
 print("Get labeled observations")
 labeledObservations=s.getObservations(l1Files)
 if len(labeledObservations) == H1Akeywordcount:
-    print("PASS")
-    print()
+    print("PASS - correct number")
+else:
+    print("FAIL")
+print()    
     
 print("Get labeled observations for 20250116UTc")
 if len(labeledObservations['20250116UTc']) == 11:
-    print("PASS")
-    print()
+    print("PASS - correct number")
+else:
+    print("FAIL")
+
 if labeledObservations['20250116UTc'] == labeledobsref:
-    print("PASS")
-    print()
+    print("PASS - correct files")
+else:
+    print("FAIL")
+print()
 
-
+print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00'")
 fobsdate=s.filterObsByDate(s.getObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00')
-print(fobsdate)
+print(len(fobsdate))
+if len(fobsdate) == 3:
+    print("PASS - correct number")
+else:
+    print("FAIL")
+if list(fobsdate.keys()) == ['20250116UTm','20250116UTn','20250116UTo']:
+    print("PASS - correct obskeys")
+else:
+    print("FAIL")
+print()
+
+print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00' AND keword")
+superfilter=s.filterByKeyword(s.filterObsByDate(s.getObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00'),'656HIA')
+if superfilter == superfilterref:
+    print("PASS - identical")
+else:
+    print("FAIL")
