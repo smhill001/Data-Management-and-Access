@@ -196,16 +196,21 @@ def createYearsHistogram(data):
 
 def createHistogram(data, year): 
     dates = createDatesArray(list(data.keys()), year)
+    print(dates)
     fig, ax = plt.subplots(1,1)
-    ax.hist(dates, bins=365, color='blue')
+    ax.hist(dates, bins=365, color='black')
     #
     #ax.set_xticks(selected_dates)
     #ax.set_xticklabels(labels)
     #
-    ax.xaxis.set_major_locator(mdates.DayLocator())
-    ax.xaxis.set_major_formatter(mdates.DateFormatter(''))
-    plt.xlabel("Year")
+    ax.xaxis.set_major_locator(mdates.MonthLocator())
+    #ax.xaxis.set_major_formatter(mdates.DateFormatter('%m'))
+    ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+  
     plt.ylabel("Observations")
+    plt.xlabel(year)
     plt.show()
     
 
@@ -221,7 +226,7 @@ with open('./Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
     #print(createDatesArray(list(d.keys())))
-    createHistogram(d, 2025)
+    createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
