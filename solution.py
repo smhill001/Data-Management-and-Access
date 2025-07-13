@@ -164,7 +164,10 @@ def sortFilesByDate(files):
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
-print(filterByKeyword(getObservations(l1Files), '656HIA'))
+with open('./observations.json', 'w', encoding='utf-8') as f:
+    json.dump(getObservations(l1Files), f, ensure_ascii=False, indent=4)
+
+
 
 
 with open('./Data_Samples/Catalog.json') as f:
