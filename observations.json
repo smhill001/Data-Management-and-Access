@@ -9,8 +9,7 @@
         "2025-01-16-0048_1-Jupiter_632OI.CameraSettings.txt",
         "2025-01-16-0050_2-Jupiter_656HIA.CameraSettings.txt",
         "2025-01-16-0052_0-Jupiter_685NIR.CameraSettings.txt",
-        "2025-01-16-0053_6-Jupiter_550GRN.CameraSettings.txt",
-        "2025-01-16-0055_1-Jupiter_450BLU.CameraSettings.txt"
+        "2025-01-16-0053_6-Jupiter_550GRN.CameraSettings.txt"
     ],
     "20250116UTb": [
         "2025-01-16-0056_9-Jupiter_656HIA.CameraSettings.txt",
@@ -61,8 +60,7 @@
         "2025-01-16-0211_8-Jupiter_632OI.CameraSettings.txt",
         "2025-01-16-0213_8-Jupiter_656HIA.CameraSettings.txt",
         "2025-01-16-0215_6-Jupiter_685NIR.CameraSettings.txt",
-        "2025-01-16-0217_2-Jupiter_550GRN.CameraSettings.txt",
-        "2025-01-16-0218_7-Jupiter_450BLU.CameraSettings.txt"
+        "2025-01-16-0217_2-Jupiter_550GRN.CameraSettings.txt"
     ],
     "20250116UTf": [
         "2025-01-16-0220_5-Jupiter_656HIA.CameraSettings.txt",
@@ -113,8 +111,7 @@
         "2025-01-16-0337_2-Jupiter_632OI.CameraSettings.txt",
         "2025-01-16-0339_3-Jupiter_656HIA.CameraSettings.txt",
         "2025-01-16-0341_1-Jupiter_685NIR.CameraSettings.txt",
-        "2025-01-16-0342_6-Jupiter_550GRN.CameraSettings.txt",
-        "2025-01-16-0344_2-Jupiter_450BLU.CameraSettings.txt"
+        "2025-01-16-0342_6-Jupiter_550GRN.CameraSettings.txt"
     ],
     "20250116UTj": [
         "2025-01-16-0347_3-Jupiter_656HIA.CameraSettings.txt",
@@ -165,8 +162,7 @@
         "2025-01-16-0514_4-Jupiter_632OI.CameraSettings.txt",
         "2025-01-16-0516_4-Jupiter_656HIA.CameraSettings.txt",
         "2025-01-16-0518_2-Jupiter_685NIR.CameraSettings.txt",
-        "2025-01-16-0519_8-Jupiter_550GRN.CameraSettings.txt",
-        "2025-01-16-0521_3-Jupiter_450BLU.CameraSettings.txt"
+        "2025-01-16-0519_8-Jupiter_550GRN.CameraSettings.txt"
     ],
     "20250116UTn": [
         "2025-01-16-0523_1-Jupiter_656HIA.CameraSettings.txt",
@@ -217,8 +213,7 @@
         "2025-01-16-0638_0-Jupiter_632OI.CameraSettings.txt",
         "2025-01-16-0640_1-Jupiter_656HIA.CameraSettings.txt",
         "2025-01-16-0641_9-Jupiter_685NIR.CameraSettings.txt",
-        "2025-01-16-0643_4-Jupiter_550GRN.CameraSettings.txt",
-        "2025-01-16-0645_0-Jupiter_450BLU.CameraSettings.txt"
+        "2025-01-16-0643_4-Jupiter_550GRN.CameraSettings.txt"
     ],
     "20250116UTr": [
         "2025-01-16-0646_8-Jupiter_656HIA.CameraSettings.txt",
@@ -269,7 +264,14 @@
         "2025-01-16-0801_7-Jupiter_632OI.CameraSettings.txt",
         "2025-01-16-0803_7-Jupiter_656HIA.CameraSettings.txt",
         "2025-01-16-0805_5-Jupiter_685NIR.CameraSettings.txt",
-        "2025-01-16-0807_1-Jupiter_550GRN.CameraSettings.txt",
-        "2025-01-16-0808_6-Jupiter_450BLU.CameraSettings.txt"
+        "2025-01-16-0807_1-Jupiter_550GRN.CameraSettings.txt"
+    ],
+    "incomplete": [
+        "20250116UTa",
+        "20250116UTe",
+        "20250116UTi",
+        "20250116UTm",
+        "20250116UTq",
+        "20250116UTu"
     ]
 }

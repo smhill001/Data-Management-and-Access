@@ -141,9 +141,14 @@ def filterByKeyword(data, keyword):
 #generates obskeys for each observation
 def labelObservations(observations):
     labeledObs = {}
+    incompleteObs = []
     for index, obs in enumerate(observations):
+       
         label = obs[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
         labeledObs[label] = obs
+        if len(obs) < 11:
+            incompleteObs.append(label)
+    labeledObs["incomplete"] = incompleteObs
     return labeledObs
 
 def getObservations(files):
@@ -169,8 +174,11 @@ def sortFilesByDate(files):
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
-with open('./observations.json', 'w', encoding='utf-8') as f:
-    json.dump(getObservations(l1Files), f, ensure_ascii=False, indent=4)
+def obsToJSON():
+    with open('./observations.json', 'w', encoding='utf-8') as f:
+        json.dump(getObservations(l1Files), f, ensure_ascii=False, indent=4)
+
+obsToJSON()
 
 def createDatesArray(keys, year = None):
     dateData = []
