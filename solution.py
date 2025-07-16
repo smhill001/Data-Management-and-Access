@@ -269,7 +269,9 @@ def createHistogram(data, yearArr):
     end = datetime(year, 12, 31)
     delta = end - start
     bins = [mdates.date2num(start + timedelta(days=i)) for i in range(delta.days + 2)]
-
+   
+    
+    ax.set_xlim(start, end)
     for i in range(len(yearArr)):
         dates = createDatesArray(list(data.keys()), yearArr[i])
         ax.hist(dates, bins = bins, alpha = 0.5, color = colorArr[i], label=yearArr[i])
