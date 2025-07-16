@@ -1,9 +1,9 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-
+import numpy as np
 
 
 def formatLB(ch, nh, rgb):
@@ -233,16 +233,25 @@ def obsToJSON():
 
 getL1AProcessingFiles(l1Files)
 
-def createDatesArray(keys, year = None):
+def createYearDatesArray(keys, year = None):
     dateData = []
  
     for key in keys:
         if (not year) or year == key[:4]:
-            dateData.append(mdates.datestr2num(key[:8]))
+            dateData.append(mdates.datestr2num(key[0:8]))
+    return dateData
+
+def createDatesArray(keys, year = None):
+    dateData = []
+    for key in keys:
+        if (not year) or year == key[:4]:
+            dateData.append(datetime.strptime("1492" + key[4:8], "%Y%m%d"))
+            #dateData.append(mdates.datestr2num("1492" + key[4:8]))
+  
     return dateData
 
 def createYearsHistogram(data):  
-    dates = createDatesArray(list(data.keys()))
+    dates = createYearDatesArray(list(data.keys()))
     fig, ax = plt.subplots(1,1)
     ax.hist(dates, bins=70, color='blue')
     ax.xaxis.set_major_locator(mdates.YearLocator())
@@ -251,16 +260,25 @@ def createYearsHistogram(data):
     plt.ylabel("Observations")
     plt.show()
 
-def createHistogram(data, year:str): 
-    dates = createDatesArray(list(data.keys()), year)
+def createHistogram(data, yearArr): 
+    colorArr = ['red', 'black', 'blue', 'lightblue', 'green', 'orange']
     fig, ax = plt.subplots(1,1)
-    ax.hist(dates, bins = 365, color='black')
+    
+    year = 1492
+    start = datetime(year, 1, 1)
+    end = datetime(year, 12, 31)
+    delta = end - start
+    bins = [mdates.date2num(start + timedelta(days=i)) for i in range(delta.days + 2)]
+
+    for i in range(len(yearArr)):
+        dates = createDatesArray(list(data.keys()), yearArr[i])
+        ax.hist(dates, bins = bins, alpha = 0.5, color = colorArr[i], label=yearArr[i])
     ax.xaxis.set_major_locator(mdates.MonthLocator())
-    ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+    ax.legend()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b')) 
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.ylabel("Observations")
-    plt.xlabel(year)
     plt.show()
     
 
@@ -276,7 +294,7 @@ with open('./Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
    
-    createHistogram(d, '2023')
+    createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
