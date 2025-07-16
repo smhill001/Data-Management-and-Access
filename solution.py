@@ -143,27 +143,77 @@ def labelObservations(observations):
     labeledObs = {}
     incompleteObs = []
     for index, obs in enumerate(observations):
-       
         label = obs[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
         labeledObs[label] = obs
         if len(obs) < 11:
             incompleteObs.append(label)
-    labeledObs["incomplete"] = incompleteObs
-    return labeledObs
+    
+    return {"data": labeledObs, "incomplete": incompleteObs}
 
-def getObservations(files):
-    sortedFiles = sortFilesByDate(getLAFiles(files))
+
+#get camera.txt
+def getCameraObservations(files):
+    sortedFiles = sortFilesByDate(getLAFiles(files, isCameraFile))
     observations = sortIntoObservations(sortedFiles)
     labeledObservations = labelObservations(observations)
     return labeledObservations
+
+
+#sorts processing files based on date of file
+#sorted into obskeys and then filter type
+def sortIntoExtendedObservations(files, cameraFiles):
+    res = {}
+    i = 0
+    for obsKey in cameraFiles.keys():
+        
+        fileObj = {}
+        for cfile in cameraFiles[obsKey]:
+            
+            cdate = datetime.fromisoformat(cfile[:15])
+            prefix = cfile[0:-19]
+            fileArr = []
+            while (i < len(files)):
+                filedate = datetime.fromisoformat(files[i][:15])
+                if filedate > cdate:
+                    break
+                if filedate == cdate:
+                    fileArr.append(files[i])
+                i += 1
+            fileObj[prefix] = fileArr
+        res[obsKey] = fileObj
+    return res    
+
+        
+#gets files for processing from camera files
+def getL1AProcessingFiles(files):
+    cameraObservations = getCameraObservations(files)["data"]
+    sortedFiles = sortFilesByDate(getLAFiles(files, isProcessingFile))
+    observations = sortIntoExtendedObservations(sortedFiles, cameraObservations)
+    print(observations)
+    return observations
     
 
 
-def getLAFiles(files):
+def getLAExtendedFiles(files):
+    selectedFiles = []
+    #for file in files:
+        
+def isCameraFile(file):
+    return file[-18:] == 'CameraSettings.txt'
+
+#identifies whether it is a png that is necessary for processing
+def isProcessingFile(file):
+    if not "png" in file:
+        return False
+    isRGBFile = ("BLU" in file or "GRN" in file or "NIR" in file)
+    if isRGBFile:
+        return "Flatstack" in file or "Aligned" in file or "WV" in file 
+    else:
+        return ("Flatstack" in file or "Aligned" in file) and "WV" not in file
+def getLAFiles(files, selector):
     selectedFiles = []
     for file in files:
-        last = file[-18:]
-        if last == 'CameraSettings.txt':
+        if selector(file):
             selectedFiles.append(file)
     return selectedFiles
 
@@ -174,11 +224,25 @@ def sortFilesByDate(files):
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
-def obsToJSON():
-    with open('./observations.json', 'w', encoding='utf-8') as f:
-        json.dump(getObservations(l1Files), f, ensure_ascii=False, indent=4)
+def getAlignedFlat(key, data):
+    arr = []
+    keyData = data[key]
+    for file in keyData:
+        print(file)
 
+    
+
+
+def obsToJSON():
+   
+    
+    with open('./observations.json', 'w', encoding='utf-8') as f:
+        json.dump(getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
+    
+#creates json file with incomplete property for keys with missing files
+getL1AProcessingFiles(l1Files)
 obsToJSON()
+
 
 def createDatesArray(keys, year = None):
     dateData = []
@@ -233,8 +297,8 @@ with open('./Data_Samples/Catalog.json') as f:
    
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
-    #print(createDatesArray(list(d.keys())))
-    createYearsHistogram(d)
+   
+    #createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
