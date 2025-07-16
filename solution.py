@@ -224,29 +224,18 @@ def sortFilesByDate(files):
 
 l1Files = os.listdir("./Data_Samples/20250116UT")
 
-def getAlignedFlat(key, data):
-    arr = []
-    keyData = data[key]
-    for file in keyData:
-        print(file)
 
-    
-
-
+#creates json file with incomplete property for keys with missing files
 def obsToJSON():
-   
-    
     with open('./observations.json', 'w', encoding='utf-8') as f:
         json.dump(getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
     
-#creates json file with incomplete property for keys with missing files
-getL1AProcessingFiles(l1Files)
-obsToJSON()
 
+getL1AProcessingFiles(l1Files)
 
 def createDatesArray(keys, year = None):
     dateData = []
-    print(len(keys))
+ 
     for key in keys:
         if (not year) or year == key[:4]:
             dateData.append(mdates.datestr2num(key[:8]))
@@ -256,31 +245,20 @@ def createYearsHistogram(data):
     dates = createDatesArray(list(data.keys()))
     fig, ax = plt.subplots(1,1)
     ax.hist(dates, bins=70, color='blue')
-    #
-    #ax.set_xticks(selected_dates)
-    #ax.set_xticklabels(labels)
-    #
     ax.xaxis.set_major_locator(mdates.YearLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter('20%y'))
     plt.xlabel("Year")
     plt.ylabel("Observations")
     plt.show()
 
-def createHistogram(data, year): 
+def createHistogram(data, year:str): 
     dates = createDatesArray(list(data.keys()), year)
-    print(dates)
     fig, ax = plt.subplots(1,1)
     ax.hist(dates, bins=365, color='black')
-    #
-    #ax.set_xticks(selected_dates)
-    #ax.set_xticklabels(labels)
-    #
     ax.xaxis.set_major_locator(mdates.MonthLocator())
-    #ax.xaxis.set_major_formatter(mdates.DateFormatter('%m'))
     ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
     plt.xticks(rotation=45)
     plt.tight_layout()
-  
     plt.ylabel("Observations")
     plt.xlabel(year)
     plt.show()
@@ -298,7 +276,7 @@ with open('./Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
    
-    #createYearsHistogram(d)
+    createHistogram(d, '2023')
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
