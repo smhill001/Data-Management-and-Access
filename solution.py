@@ -254,7 +254,7 @@ def createYearsHistogram(data):
 def createHistogram(data, year:str): 
     dates = createDatesArray(list(data.keys()), year)
     fig, ax = plt.subplots(1,1)
-    ax.hist(dates, bins=365, color='black')
+    ax.hist(dates, bins = 365, color='black')
     ax.xaxis.set_major_locator(mdates.MonthLocator())
     ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
     plt.xticks(rotation=45)
