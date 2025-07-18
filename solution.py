@@ -165,7 +165,6 @@ def sortIntoExtendedObservations(files, cameraFiles):
     res = {}
     i = 0
     for obsKey in cameraFiles.keys():
-        
         fileObj = {}
         for cfile in cameraFiles[obsKey]:
             
@@ -253,9 +252,15 @@ def createDatesArray(keys, year = None):
 def createYearsHistogram(data):  
     dates = createYearDatesArray(list(data.keys()))
     fig, ax = plt.subplots(1,1)
-    ax.hist(dates, bins=70, color='blue')
+    bins = []
+    for year in range(2020, 2026):
+        bins += [datetime(year, month, 1) for month in range(1, 13)]
+  
+    ax.hist(dates, bins=bins, color='blue')
     ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_minor_locator(mdates.MonthLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter('20%y'))
+    
     plt.xlabel("Year")
     plt.ylabel("Observations")
     plt.show()
@@ -296,7 +301,8 @@ with open('./Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
    
-    createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
+    #createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
+    createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
