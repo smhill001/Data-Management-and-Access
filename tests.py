@@ -54,7 +54,11 @@ print()
 
 print("FilterbyKeyword ('656HIA')")
 l1Files = os.listdir("./Data_Samples/20250116UT")
-fwkw=s.filterByKeyword(s.getObservations(l1Files), '656HIA')
+print(l1Files)
+alldata=s.getCameraObservations(l1Files)
+print(alldata)
+fwkw=s.filterByKeyword(s.getCameraObservations(l1Files), '685NIR')
+print(fwkw)
 if len(fwkw) == H1Akeywordcount:
     print("PASS")
 else:
@@ -62,28 +66,28 @@ else:
 print()
 
 print("Get labeled observations")
-labeledObservations=s.getObservations(l1Files)
-if len(labeledObservations) == H1Akeywordcount:
+labeledObservations=s.getCameraObservations(l1Files)
+if len(labeledObservations['data']) == H1Akeywordcount:
     print("PASS - correct number")
 else:
     print("FAIL")
 print()    
     
 print("Get labeled observations for 20250116UTc")
-if len(labeledObservations['20250116UTc']) == 11:
+if len(labeledObservations['data']['20250116UTc']) == 11:
     print("PASS - correct number")
 else:
     print("FAIL")
 
-if labeledObservations['20250116UTc'] == labeledobsref:
+if labeledObservations['data']['20250116UTc'] == labeledobsref:
     print("PASS - correct files")
 else:
     print("FAIL")
 print()
 
 print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00'")
-fobsdate=s.filterObsByDate(s.getObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00')
-print(len(fobsdate))
+fobsdate=s.filterObsByDate(s.getCameraObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00')
+print(len(fobsdate['data']))
 if len(fobsdate) == 3:
     print("PASS - correct number")
 else:
@@ -95,7 +99,7 @@ else:
 print()
 
 print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00' AND keword")
-superfilter=s.filterByKeyword(s.filterObsByDate(s.getObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00'),'656HIA')
+superfilter=s.filterByKeyword(s.filterObsByDate(s.getCameraObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00'),'656HIA')
 if superfilter == superfilterref:
     print("PASS - identical")
 else:

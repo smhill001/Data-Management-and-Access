@@ -306,7 +306,22 @@ with open('./Data_Samples/Catalog.json') as f:
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
+l1Files = os.listdir("./Data_Samples/20250116UT")
+fwkw=filterByKeyword(getCameraObservations(l1Files), '685NIR')
+print(fwkw)
 
+labeledObservations=getCameraObservations(l1Files)
+print(labeledObservations, len(labeledObservations['data']))
 
-
-
+print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00'")
+fobsdate=filterObsByDate(getCameraObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00')
+#print(len(fobsdate['data']))
+#if len(fobsdate) == 3:
+#    print("PASS - correct number")
+#else:
+#    print("FAIL")
+#if list(fobsdate.keys()) == ['20250116UTm','20250116UTn','20250116UTo']:
+#    print("PASS - correct obskeys")
+#else:
+#    print("FAIL")
+#print()
