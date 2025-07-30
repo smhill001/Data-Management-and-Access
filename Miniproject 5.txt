@@ -1,0 +1,7 @@
+Miniproject 4 accomplished a lot! I think before we look at integrating with the PlanetMapper processing, we should focus on documentation and testing. Test-driven development is key to ensure that intermediate and end-users don't see unexpected changes in their API. Regression testing is essential for this. In addition, more verbose in-line documentation/commenting is useful. Let's look at the use of docstrings in Python to provide a header for each function. Finally, the solution.py is now over 300 lines and contains 27 functions. There should be external documentation - a readme.txt, a calling tree, and probably some example calls and use cases, which could be derived from test.py. Documentation and testing should be an iterative process between the developer and the customer, so this isn't solely a project for you. Here are the tasks I think we should accomplish:
+
+1) Add a meaningful docstring header to every function.
+2) Establish test cases with controlled input data and expected results. The tests should at least exercise every function once, either directly or via a call from a higher level function.
+3) Create a visual calling tree or trees for the functions in solution.py and possibly split solution.py into more than one module based on affinity of functions.
+4) Create a readme.txt that introduces users to the software, the data it acts upon, and provides example calls.
+

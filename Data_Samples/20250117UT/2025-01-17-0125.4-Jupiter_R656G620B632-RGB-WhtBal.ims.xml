@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WinJUPOS Version="12.3.11">
+  <ImageMeasurementSettings Version="1">
+    <FileName>C:\Astronomy\Projects\Planets\Jupiter\Imaging Data\20250117UT\2025-01-17-0125_4-Jupiter_R656G620B632-RGB-WhtBal.png</FileName>
+    <Body>Jupiter</Body>
+    <JulianDateUT>2460692.55931</JulianDateUT>
+    <ObservingPlace>Earth</ObservingPlace>
+    <GeoLongDeg>15.00000</GeoLongDeg>
+    <GeoLatDeg>50.00000</GeoLatDeg>
+    <Observer>Jupiter_R656G620B632</Observer>
+    <ImageInfo>RGB-WhtBal</ImageInfo>
+    <ColorChannel>Color</ColorChannel>
+    <CenterXPixel>130.5</CenterXPixel>
+    <CenterYPixel>130.5</CenterYPixel>
+    <EquatorialRadiusPixel>109.2</EquatorialRadiusPixel>
+    <RotationAngleDeg>0.000</RotationAngleDeg>
+    <DistanceRatioXToYOfSensorElements>1.000000</DistanceRatioXToYOfSensorElements>
+    <MirroredInvertedImage>False</MirroredInvertedImage>
+    <InverseLongitudes>False</InverseLongitudes>
+    <CM1Deg>274.79</CM1Deg>
+    <CM2Deg>295.30</CM2Deg>
+    <CM3Deg>90.19</CM3Deg>
+    <q>0.9351256575</q>
+    <DeclinationOfEarthOnPlanetDeg>2.76</DeclinationOfEarthOnPlanetDeg>
+  </ImageMeasurementSettings>
+</WinJUPOS>
