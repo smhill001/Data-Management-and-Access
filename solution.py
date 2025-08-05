@@ -209,15 +209,20 @@ def sortIntoObservations(files):
     while i < len(files):
         obs = []
         fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
-        while(True):
-            while len(fileOrder) and files[i][26:29] != fileOrder[-1]:
+        while(i < len(files)):
+            #not fileOrder[-1] in files[i]
+            while len(fileOrder) and (
+                not '_' + fileOrder[-1] in files[i]
+                and not 'R' + fileOrder[-1] in files[i]
+                ):
                 fileOrder.pop()
             if not len(fileOrder):
-                res.append(obs)
+                res.append(obs) 
                 break
             obs.append(files[i])
             fileOrder.pop()
             i += 1
+        print(i)
     return res
 
 #get by end date?
@@ -412,7 +417,7 @@ def sortFilesByDate(files):
     return files
 
 
-l1Files = os.listdir("./Data_Samples/20250116UT")
+l1Files = os.listdir("./Data_Samples/20250117UT")
 
 
 #creates json file with incomplete property for keys with missing files
@@ -427,7 +432,7 @@ def obsToJSON():
     with open('./observations.json', 'w', encoding='utf-8') as f:
         json.dump(getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
     
-
+obsToJSON()
 getL1AProcessingFiles(l1Files)
 
 def createYearDatesArray(keys, year = None):
