@@ -317,11 +317,11 @@ def sortIntoExtendedObservations(files, cameraFiles):
     i = 0
     for obsKey in cameraFiles.keys():
         fileObj = {}
+        fileArr = []
         for cfile in cameraFiles[obsKey]:
             
             cdate = datetime.fromisoformat(cfile[:15])
             prefix = cfile[0:-19]
-            fileArr = []
             while (i < len(files)):
                 filedate = datetime.fromisoformat(files[i][:15])
                 if filedate > cdate:
@@ -329,7 +329,9 @@ def sortIntoExtendedObservations(files, cameraFiles):
                 if filedate == cdate:
                     fileArr.append(files[i])
                 i += 1
-            fileObj[prefix] = fileArr
+            #fileObj[prefix] = fileArr
+        #print("fileArr=",fileArr)
+        fileObj = fileArr
         res[obsKey] = fileObj
     return res    
 
@@ -350,7 +352,7 @@ def getL1AProcessingFiles(files):
     cameraObservations = getCameraObservations(files)["data"]
     sortedFiles = sortFilesByDate(getLAFiles(files, isProcessingFile))
     observations = sortIntoExtendedObservations(sortedFiles, cameraObservations)
-    print(observations)
+    #print(observations)
     return observations
     
 def isCameraFile(file):
@@ -377,7 +379,7 @@ def isProcessingFile(file):
         return False
     isRGBFile = ("BLU" in file or "GRN" in file or "NIR" in file)
     if isRGBFile:
-        return "Flatstack" in file or "Aligned" in file or "WV" in file 
+        return "Flatstack" in file or "Aligned" in file and "WV" in file 
     else:
         return ("Flatstack" in file or "Aligned" in file) and "WV" not in file
     
