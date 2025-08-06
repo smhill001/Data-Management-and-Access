@@ -210,7 +210,6 @@ def sortIntoObservations(files):
         obs = []
         fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
         while(i < len(files)):
-            #not fileOrder[-1] in files[i]
             while len(fileOrder) and (
                 not '_' + fileOrder[-1] in files[i]
                 and not 'R' + fileOrder[-1] in files[i]
