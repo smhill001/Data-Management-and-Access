@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['solution.py', 'tests.py', 'process_L1X.py']
+recent_files = ['solution.py', 'tests.py', 'process_L1X.py', 'read_FITS_example.py']
 
 [main]
 version = 0.2.0

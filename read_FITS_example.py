@@ -1,5 +1,6 @@
 from astropy.io import fits
 import matplotlib.pyplot as pl
+import planetmapper as pm
 
 # (1) Level 3 FITS image file example. One data array. Show data image and header metadata
 
@@ -62,12 +63,23 @@ hdul = fits.HDUList([hdu,secondarray])
 
 
 hdul[0].header=PMImghdr
-    
 hdul[0].header['NEW']='A NEW keyword'
 
-print()
+"""
+body = pm.BodyXY('Jupiter', hdul[0].header['HIERARCH PLANMAP UTC-OBS'])
+
 print(hdul[0].header)
-  
+
+print()
+
+print(hdul[0].header['HIERARCH PLANMAP UTC-OBS'])
+print(hdul[0].header['HIERARCH PLANMAP SUBPOINT LON'])
+
+print("body.subpoint_lon=",body.subpoint_lon)
+print("body.subpoint_lat=",body.subpoint_lat)
+
+print()
+"""  
 fnout='New.FITS'
 
 hdul.writeto(PMpath+fnout,overwrite=True)
