@@ -47,6 +47,9 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
         else:
             observation.set_disc_params(params[0],params[1],params[2],params[3])
 
+        #observation.add_header_metadata()
+        observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
+
         observation.save_observation(fn.replace(".png",".fits"))
         observation.save_mapped_observation(fn.replace(".png","map.fits"))
         First=False
