@@ -140,11 +140,18 @@ else:
 print("TEST #6: Create Observations JSON from test data 20250116UT")
 with open('./observations.json', 'w', encoding='utf-8') as f:
     json.dump(s.getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
+print("TEST #9: Create Processing Files JSON from REAL data on 20241202UT")
+
+###############################################################################
+print("TEST #6a: Create Processing JSON from test data 20250116UT")
+with open('./processing.json', 'w', encoding='utf-8') as f:
+    json.dump(s.getL1AProcessingFiles(l1Files), f, ensure_ascii=False, indent=4)
+    
 ###############################################################################
 print("TEST #7: Create Observations JSON from test data 20250117UT")
-l1Files = os.listdir("./Data_Samples/20250117UT")
-with open('./observations.json', 'w', encoding='utf-8') as f:
-    json.dump(s.getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
+#l1Files = os.listdir("./Data_Samples/20250117UT")
+#with open('./observations.json', 'w', encoding='utf-8') as f:
+#    json.dump(s.getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
         
 ###############################################################################
 print("TEST #8: Create Observations JSON from REAL data on 20241202UT")
@@ -155,6 +162,7 @@ with open(path+'/observations.json', 'w', encoding='utf-8') as f:
     json.dump(s.getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
     
 ###############################################################################
+
 """
 print("TEST #8: Create Observations JSON from test data")
 

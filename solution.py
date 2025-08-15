@@ -209,15 +209,19 @@ def sortIntoObservations(files):
     while i < len(files):
         obs = []
         fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
-        while(True):
-            while len(fileOrder) and files[i][26:29] != fileOrder[-1]:
+        while(i < len(files)):
+            while len(fileOrder) and (
+                not '_' + fileOrder[-1] in files[i]
+                and not 'R' + fileOrder[-1] in files[i]
+                ):
                 fileOrder.pop()
             if not len(fileOrder):
-                res.append(obs)
+                res.append(obs) 
                 break
             obs.append(files[i])
             fileOrder.pop()
             i += 1
+        print(i)
     return res
 
 #get by end date?
@@ -317,11 +321,11 @@ def sortIntoExtendedObservations(files, cameraFiles):
     i = 0
     for obsKey in cameraFiles.keys():
         fileObj = {}
+        fileArr = []
         for cfile in cameraFiles[obsKey]:
             
             cdate = datetime.fromisoformat(cfile[:15])
             prefix = cfile[0:-19]
-            fileArr = []
             while (i < len(files)):
                 filedate = datetime.fromisoformat(files[i][:15])
                 if filedate > cdate:
@@ -329,7 +333,9 @@ def sortIntoExtendedObservations(files, cameraFiles):
                 if filedate == cdate:
                     fileArr.append(files[i])
                 i += 1
-            fileObj[prefix] = fileArr
+            #fileObj[prefix] = fileArr
+        #print("fileArr=",fileArr)
+        fileObj = fileArr
         res[obsKey] = fileObj
     return res    
 
@@ -350,7 +356,7 @@ def getL1AProcessingFiles(files):
     cameraObservations = getCameraObservations(files)["data"]
     sortedFiles = sortFilesByDate(getLAFiles(files, isProcessingFile))
     observations = sortIntoExtendedObservations(sortedFiles, cameraObservations)
-    print(observations)
+    #print(observations)
     return observations
     
 def isCameraFile(file):
@@ -377,7 +383,7 @@ def isProcessingFile(file):
         return False
     isRGBFile = ("BLU" in file or "GRN" in file or "NIR" in file)
     if isRGBFile:
-        return "Flatstack" in file or "Aligned" in file or "WV" in file 
+        return "Flatstack" in file or "Aligned" in file and "WV" in file 
     else:
         return ("Flatstack" in file or "Aligned" in file) and "WV" not in file
     
@@ -410,7 +416,7 @@ def sortFilesByDate(files):
     return files
 
 
-l1Files = os.listdir("./Data_Samples/20250116UT")
+l1Files = os.listdir("./Data_Samples/20250117UT")
 
 
 #creates json file with incomplete property for keys with missing files
@@ -425,7 +431,7 @@ def obsToJSON():
     with open('./observations.json', 'w', encoding='utf-8') as f:
         json.dump(getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
     
-
+obsToJSON()
 getL1AProcessingFiles(l1Files)
 
 def createYearDatesArray(keys, year = None):
