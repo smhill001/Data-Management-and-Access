@@ -7,9 +7,14 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     path="./Data_Samples/20250116UT/"
     l1Files = os.listdir(path)
     file_list=s.getL1AProcessingFiles(l1Files)[obskey]
+    camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
+    planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+
     First=True
+    i = 0
     for fn in file_list:
+       
         time=fn[0:10]+"T"+fn[11:13]+":"+fn[13:15]
         observation = planetmapper.Observation(path+fn,target=planet,utc=time)
         #print("1##########observation.backplanes=",list(observation.backplanes.keys()))
@@ -49,7 +54,21 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
 
         #observation.add_header_metadata()
         observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
+        #filetype = fn[fn.index('_') + 1: fn.index('-')]
+        
+        camera_file = camera_obs_list[i]
+       #ioptron key does not fit standard
+        with open(path + camera_file, 'r') as cf:
+            for line in cf:
+                pair = line.strip()
+                if "=" in pair and not "iOptron" in pair:
+                    key = pair[:pair.index('=')]
+                    value = pair[pair.index('=') + 1:]
+                    print(key)
+                    observation.append_to_header(key, value, hierarch_keyword=True)
+        i += 1
 
         observation.save_observation(fn.replace(".png",".fits"))
         observation.save_mapped_observation(fn.replace(".png","map.fits"))
         First=False
+process_L1X()
