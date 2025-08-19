@@ -12,10 +12,9 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
 
     First=True
-    i = 0
-    for fn in file_list:
-        """if not "450BLU" in fn:
-            continue"""
+   
+    for i, fn in enumerate(file_list):
+        
         time=fn[0:10]+"T"+fn[11:13]+":"+fn[13:15]
         observation = planetmapper.Observation(path+fn,target=planet,utc=time)
         #print("1##########observation.backplanes=",list(observation.backplanes.keys()))
@@ -57,27 +56,24 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
         observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
         #filetype = fn[fn.index('_') + 1: fn.index('-')]
         
+        #populate header with camera metadata
         camera_file = camera_obs_list[i]
-       #ioptron key does not fit standard
         with open(path + camera_file, 'r') as cf:
             for line in cf:
                 pair = line.strip()
                 if "iOptron" in pair:
                     startIndex = pair.index('=')
-                    key1 = 'RA'
                     commaIndex = pair.find(',', startIndex)
                     value1 = pair[startIndex + 4: commaIndex]
-                    key2 = 'Dec'
                     value2 = pair[pair.find('=', commaIndex) + 1:]
-                    observation.append_to_header(key1, value1, hierarch_keyword=True)
-                    observation.append_to_header(key2, value2, hierarch_keyword=True)
+                    observation.append_to_header('HEIRARCH SHRPCAP RA', value1, hierarch_keyword=False)
+                    observation.append_to_header('HEIRARCH SHRPCAP Dec', value2, hierarch_keyword=False)
 
                 elif "=" in pair:
                     key = pair[:pair.index('=')]
                     value = pair[pair.index('=') + 1:]
-                   
-                    observation.append_to_header(key, value, hierarch_keyword=True)
-        i += 1
+                    observation.append_to_header("HEIRARCH SHRPCAP " + key, value, hierarch_keyword=False)
+        
 
         observation.save_observation(fn.replace(".png",".fits"))
         observation.save_mapped_observation(fn.replace(".png","map.fits"))
