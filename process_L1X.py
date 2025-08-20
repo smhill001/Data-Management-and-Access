@@ -1,5 +1,5 @@
 def process_L1X(obskey="20250116UTa",planet='Jupiter'):
-
+    
     import planetmapper
     import os
     import solution as s
@@ -9,7 +9,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     file_list=s.getL1AProcessingFiles(l1Files)[obskey]
     camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
-    planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+    #planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
 
     First=True
    
@@ -66,16 +66,30 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
                     commaIndex = pair.find(',', startIndex)
                     value1 = pair[startIndex + 4: commaIndex]
                     value2 = pair[pair.find('=', commaIndex) + 1:]
-                    observation.append_to_header('SHRPCAP RA', value1, hierarch_keyword=False)
-                    observation.append_to_header('SHRPCAP Dec', value2, hierarch_keyword=False)
+                    observation.append_to_header('SHRPCAP RA', formatType(value1), hierarch_keyword=False)
+                    observation.append_to_header('SHRPCAP Dec', formatType(value2), hierarch_keyword=False)
 
                 elif "=" in pair:
                     key = pair[:pair.index('=')]
                     value = pair[pair.index('=') + 1:]
-                    observation.append_to_header("SHRPCAP " + key, value, hierarch_keyword=False)
+                    observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
         
 
         observation.save_observation(fn.replace(".png",".fits"))
         observation.save_mapped_observation(fn.replace(".png","map.fits"))
         First=False
+def formatType(value):
+    """
+    Converts string content to proper type
+    Parameters:
+    value (string): to be converted
+    Returns: (float, int, or string)
+    """
+    if value.isdigit():
+        return int(value)
+    if value.replace('.', '', 1).isdigit() and value.count('.') == 1:
+        return float(value)
+   
+    return value.strip()
+
 process_L1X()
