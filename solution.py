@@ -221,7 +221,7 @@ def sortIntoObservations(files):
             obs.append(files[i])
             fileOrder.pop()
             i += 1
-        print(i)
+       
     return res
 
 #get by end date?
@@ -296,11 +296,11 @@ def getCameraObservations(files):
     Object: data: camera.txt files sorted into observations and assigned obskeys
             incomplete: list of incomplete observations
     """
-    print('sorting files by date')
+    #print('sorting files by date')
     sortedFiles = sortFilesByDate(getLAFiles(files, isCameraFile))
-    print('sorting into observations')
+    #print('sorting into observations')
     observations = sortIntoObservations(sortedFiles)
-    print('labeling observations')
+    #print('labeling observations')
     labeledObservations = labelObservations(observations)
     return labeledObservations
 
@@ -528,25 +528,25 @@ def createHistogram(data, yearArr):
 
 with open('./Data_Samples/Catalog.json') as f:
     d = json.load(f)
-    
+    """
     print()
     print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")
     print()
    
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
-   
-    createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
-    createYearsHistogram(d)
+   """
+    #createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
+    #createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
 l1Files = os.listdir("./Data_Samples/20250116UT")
 fwkw=filterByKeyword(getCameraObservations(l1Files), '685NIR')
-print(fwkw)
+#print(fwkw)
 
 labeledObservations=getCameraObservations(l1Files)
-print(labeledObservations, len(labeledObservations['data']))
+#print(labeledObservations, len(labeledObservations['data']))
 
 #print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00'")
 #fobsdate=filterObsByDate(getCameraObservations(l1Files) ,'2025-01-16 05:00', '2025-01-16 06:00')
