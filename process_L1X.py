@@ -53,7 +53,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
             observation.set_disc_params(params[0],params[1],params[2],params[3])
 
         #observation.add_header_metadata()
-        observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
+        #observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
         #filetype = fn[fn.index('_') + 1: fn.index('-')]
         
         #populate header with camera metadata
@@ -66,13 +66,13 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
                     commaIndex = pair.find(',', startIndex)
                     value1 = pair[startIndex + 4: commaIndex]
                     value2 = pair[pair.find('=', commaIndex) + 1:]
-                    observation.append_to_header('HEIRARCH SHRPCAP RA', value1, hierarch_keyword=False)
-                    observation.append_to_header('HEIRARCH SHRPCAP Dec', value2, hierarch_keyword=False)
+                    observation.append_to_header('SHRPCAP RA', value1, hierarch_keyword=False)
+                    observation.append_to_header('SHRPCAP Dec', value2, hierarch_keyword=False)
 
                 elif "=" in pair:
                     key = pair[:pair.index('=')]
                     value = pair[pair.index('=') + 1:]
-                    observation.append_to_header("HEIRARCH SHRPCAP " + key, value, hierarch_keyword=False)
+                    observation.append_to_header("SHRPCAP " + key, value, hierarch_keyword=False)
         
 
         observation.save_observation(fn.replace(".png",".fits"))
