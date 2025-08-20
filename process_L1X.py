@@ -1,5 +1,5 @@
 def process_L1X(obskey="20250116UTa",planet='Jupiter'):
-
+    
     import planetmapper
     import os
     import solution as s
@@ -7,9 +7,14 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     path="./Data_Samples/20250116UT/"
     l1Files = os.listdir(path)
     file_list=s.getL1AProcessingFiles(l1Files)[obskey]
+    camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
+    #planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+
     First=True
-    for fn in file_list:
+   
+    for i, fn in enumerate(file_list):
+        
         time=fn[0:10]+"T"+fn[11:13]+":"+fn[13:15]
         observation = planetmapper.Observation(path+fn,target=planet,utc=time)
         #print("1##########observation.backplanes=",list(observation.backplanes.keys()))
@@ -48,8 +53,43 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
             observation.set_disc_params(params[0],params[1],params[2],params[3])
 
         #observation.add_header_metadata()
-        observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
+        #observation.append_to_header('HEIRARCH SHRPCAP '+'TESTKEY','This is a test',hierarch_keyword=False)
+        #filetype = fn[fn.index('_') + 1: fn.index('-')]
+        
+        #populate header with camera metadata
+        camera_file = camera_obs_list[i]
+        with open(path + camera_file, 'r') as cf:
+            for line in cf:
+                pair = line.strip()
+                if "iOptron" in pair:
+                    startIndex = pair.index('=')
+                    commaIndex = pair.find(',', startIndex)
+                    value1 = pair[startIndex + 4: commaIndex]
+                    value2 = pair[pair.find('=', commaIndex) + 1:]
+                    observation.append_to_header('SHRPCAP RA', formatType(value1), hierarch_keyword=False)
+                    observation.append_to_header('SHRPCAP Dec', formatType(value2), hierarch_keyword=False)
+
+                elif "=" in pair:
+                    key = pair[:pair.index('=')]
+                    value = pair[pair.index('=') + 1:]
+                    observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
+        
 
         observation.save_observation(fn.replace(".png",".fits"))
         observation.save_mapped_observation(fn.replace(".png","map.fits"))
         First=False
+def formatType(value):
+    """
+    Converts string content to proper type
+    Parameters:
+    value (string): to be converted
+    Returns: (float, int, or string)
+    """
+    if value.isdigit():
+        return int(value)
+    if value.replace('.', '', 1).isdigit() and value.count('.') == 1:
+        return float(value)
+   
+    return value.strip()
+
+process_L1X()
