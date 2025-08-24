@@ -15,8 +15,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     First=True
    
     for i, fn in enumerate(file_list):
-        if not "BLU" in fn:
-            continue
+        
         time=fn[0:10]+"T"+fn[11:13]+":"+fn[13:15]
         observation = planetmapper.Observation(path+fn,target=planet,utc=time)
         #print("1##########observation.backplanes=",list(observation.backplanes.keys()))
@@ -76,9 +75,10 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
                     value = pair[pair.index('=') + 1:]
                     observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
         
-
-        observation.save_observation('FITS/' + fn.replace(".png",".fits"))
-        observation.save_mapped_observation('FITS/' + fn.replace(".png","map.fits"))
+        dir_path = 'FITS/' + obskey
+        os.makedirs(dir_path, exist_ok = True)
+        observation.save_observation(dir_path + "/" + fn.replace(".png",".fits"))
+        observation.save_mapped_observation(dir_path + "/" + fn.replace(".png","map.fits"))
         First=False
 def formatType(value):
     """
