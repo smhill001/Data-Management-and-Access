@@ -3,6 +3,7 @@ from astropy.io import fits
 import matplotlib.pyplot as pl
 import planetmapper as pm
 import numpy as np
+from datetime import datetime
 
 def getFilePairs(files):
     filters = ['HIA', 'OI', 'CH4', 'NH3']
@@ -15,6 +16,21 @@ def getFilePairs(files):
        
         res.append(filePair)
     return res
+def averageDates(datestr1, datestr2):
+    #loses a microsecond
+    date1 = datetime.fromisoformat(datestr1)
+    date2 = datetime.fromisoformat(datestr2)
+    avgDate = datetime.fromtimestamp( (date1.timestamp() + date2.timestamp()) / 2)
+    return avgDate.strftime("%Y-%m-%dT%H:%M:%S.%f")
+
+def averageCameraDates(newHdr, hdr1, hdr2, key):
+    prefix = "HIERARCH SHRPCAP "
+    newHdr[prefix + key] = averageDates(hdr1[prefix + key], hdr2[prefix + key]) + "Z"
+def averageJDCameraDates(newHdr, hdr1, hdr2, key):
+    prefix = "HIERARCH SHRPCAP "
+    newHdr[prefix +  key] = (hdr1[prefix +  key] + hdr2[prefix + key]) / 2
+
+
 
 
 def process_L1Y(obskey="20250116UTa"):
@@ -40,6 +56,25 @@ def process_L1Y(obskey="20250116UTa"):
 
 
         hdul = fits.HDUList([hdu, lonArr, latArr, incidenceArr, emissionArr])
+        hdr1, hdr2 = hdul1[0].header, hdul2[0].header
+        hdul[0].header = hdul1[0].header
+        hdr = hdul[0].header
+        hdr["DATE-OBS"] = averageDates(hdr1["DATE-OBS"], hdr2["DATE-OBS"])
+        averageCameraDates(hdr, hdr1, hdr2, "TimeStamp")
+        averageCameraDates(hdr, hdr1, hdr2, "StartCapture")
+        averageCameraDates(hdr, hdr1, hdr2, "MidCapture")
+        averageCameraDates(hdr, hdr1, hdr2, "EndCapture")
+        averageJDCameraDates(hdr, hdr1, hdr2, "JDStartCapture")
+        averageJDCameraDates(hdr, hdr1, hdr2, "JDMidCapture")
+        averageJDCameraDates(hdr, hdr1, hdr2, "JDEndCapture")
+        prefix = "HIERARCH PLANMAP "
+        hdr[prefix + "UTC-OBS"] = averageDates(hdr1[prefix + "UTC-OBS"], hdr2[prefix + "UTC-OBS"])
+        hdr[prefix + "ET-OBS"] = (hdr1[prefix +  "ET-OBS"] + hdr2[prefix + "ET-OBS"]) / 2
+        print(repr(hdr))
+        
+
+        
+        
         #hdul.writeto('new1.fits')
       
         hdul1.close()
