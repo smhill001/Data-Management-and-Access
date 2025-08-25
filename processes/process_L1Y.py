@@ -4,6 +4,8 @@ import matplotlib.pyplot as pl
 import planetmapper as pm
 import numpy as np
 from datetime import datetime
+from astropy.coordinates import SkyCoord
+import astropy.units as u
 
 def getFilePairs(files):
     filters = ['HIA', 'OI', 'CH4', 'NH3']
@@ -26,10 +28,25 @@ def averageDates(datestr1, datestr2):
 def averageCameraDates(newHdr, hdr1, hdr2, key):
     prefix = "HIERARCH SHRPCAP "
     newHdr[prefix + key] = averageDates(hdr1[prefix + key], hdr2[prefix + key]) + "Z"
-def averageJDCameraDates(newHdr, hdr1, hdr2, key):
-    prefix = "HIERARCH SHRPCAP "
-    newHdr[prefix +  key] = (hdr1[prefix +  key] + hdr2[prefix + key]) / 2
 
+def averageHdrNum(newHdr, hdr1, hdr2, key):
+    print(key)
+    newHdr[key] = (hdr1[key] + hdr2[key]) / 2
+#finds midpoint
+def averageCoors(newHdr, hdr1, hdr2):
+    ra1 = hdr1["HIERARCH SHRPCAP RA"]
+    ra2 = hdr2["HIERARCH SHRPCAP RA"] 
+    dec1 =  hdr1["HIERARCH SHRPCAP Dec"].split(' ')[0]
+    dec2 = hdr2["HIERARCH SHRPCAP Dec"].split(' ')[0]
+    
+    coord1 = SkyCoord(ra1, dec1, unit = (u.hourangle, u.deg) )
+    coord2 = SkyCoord(ra2, dec2, unit = (u.hourangle, u.deg) )
+    pa = coord1.position_angle(coord2)
+    sep = coord1.separation(coord2)
+    midcoor = coord1.directional_offset_by(pa, sep/2)
+    newHdr["HIERARCH SHRPCAP RA"] = midcoor.ra.to_string(unit=u.hourangle, sep= ":", precision=1)
+    newHdr["HIERARCH SHRPCAP Dec"] = midcoor.dec.to_string(unit=u.deg, sep= ":", precision=0, alwayssign= True) + " (JNOW)"
+    
 
 
 
@@ -64,13 +81,20 @@ def process_L1Y(obskey="20250116UTa"):
         averageCameraDates(hdr, hdr1, hdr2, "StartCapture")
         averageCameraDates(hdr, hdr1, hdr2, "MidCapture")
         averageCameraDates(hdr, hdr1, hdr2, "EndCapture")
-        averageJDCameraDates(hdr, hdr1, hdr2, "JDStartCapture")
-        averageJDCameraDates(hdr, hdr1, hdr2, "JDMidCapture")
-        averageJDCameraDates(hdr, hdr1, hdr2, "JDEndCapture")
+        averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP JDStartCapture")
+        averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP JDMidCapture")
+        averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP JDEndCapture")
+        averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP ET-OBS")
         prefix = "HIERARCH PLANMAP "
         hdr[prefix + "UTC-OBS"] = averageDates(hdr1[prefix + "UTC-OBS"], hdr2[prefix + "UTC-OBS"])
-        hdr[prefix + "ET-OBS"] = (hdr1[prefix +  "ET-OBS"] + hdr2[prefix + "ET-OBS"]) / 2
+       
+        averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Focuser Temperature")
+        averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Temperature")
+        averageCoors(hdr,hdr1,hdr2)
         print(repr(hdr))
+
+
+        
         
 
         
