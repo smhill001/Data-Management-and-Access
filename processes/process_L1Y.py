@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime
 from astropy.coordinates import SkyCoord
 import astropy.units as u
-
+#drop units
 def getFilePairs(files):
     filters = ['HIA', 'OI', 'CH4', 'NH3']
     res = []
@@ -30,8 +30,13 @@ def averageCameraDates(newHdr, hdr1, hdr2, key):
     newHdr[prefix + key] = averageDates(hdr1[prefix + key], hdr2[prefix + key]) + "Z"
 
 def averageHdrNum(newHdr, hdr1, hdr2, key):
-    print(key)
+    
     newHdr[key] = (hdr1[key] + hdr2[key]) / 2
+
+def sumHdrNum(newHdr, hdr1, hdr2, key):
+    newHdr[key] = hdr1[key] + hdr2[key]
+
+
 #finds midpoint
 def averageCoors(newHdr, hdr1, hdr2):
     ra1 = hdr1["HIERARCH SHRPCAP RA"]
@@ -91,7 +96,19 @@ def process_L1Y(obskey="20250116UTa"):
         averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Focuser Temperature")
         averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Temperature")
         averageCoors(hdr,hdr1,hdr2)
-        print(repr(hdr))
+
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP FrameCount")
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LAT")
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LON")
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LAT")
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LON")
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP LIGHT-TIME")
+        sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP DISTANCE")
+        key = "HIERARCH SHRPCAP Duration"
+        
+        hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
+        
+        #print(repr(hdr))
 
 
         
