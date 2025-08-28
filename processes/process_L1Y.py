@@ -53,7 +53,10 @@ def averageCoors(newHdr, hdr1, hdr2):
     newHdr["HIERARCH SHRPCAP RA"] = midcoor.ra.to_string(unit=u.hourangle, sep= ":", precision=1)
     newHdr["HIERARCH SHRPCAP Dec"] = midcoor.dec.to_string(unit=u.deg, sep= ":", precision=0, alwayssign= True) + " (JNOW)"
     
-
+def avgData(extension, f1, f2):
+        data1 = f1[extension].data
+        data2 = f2[extension].data
+        return  np.array((data1 + data2) / 2)
 
 
 def process_L1Y(obskey="20250116UTa"):
@@ -61,15 +64,11 @@ def process_L1Y(obskey="20250116UTa"):
     files = os.listdir(PMpath)
     filePairs = getFilePairs(files)
 
-    def avgData(extension, f1, f2):
-        data1 = f1[extension].data
-        data2 = f2[extension].data
-        return  np.array((data1 + data2) / 2)
+    
     for f1, f2 in filePairs:
         hdul1 = fits.open(PMpath+ '/' + f1)
         hdul2 = fits.open(PMpath+ '/' + f2)
-        PMImgdata1 = hdul1[0].data  
-        PMImgdata2 = hdul2[0].data 
+        
         
         hdu = fits.PrimaryHDU(avgData(0, hdul1, hdul2))
         lonArr = fits.ImageHDU(hdul1[1].data)
