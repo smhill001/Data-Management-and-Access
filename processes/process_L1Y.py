@@ -6,9 +6,16 @@ import numpy as np
 from datetime import datetime
 from astropy.coordinates import SkyCoord
 import astropy.units as u
-#drop units
-#def generateFileName(obskey, name)
+
 def getFilePairs(files):
+    """
+         Gets pairs of scientific files for each filter
+
+         Parameters:
+         files (Array[string]): list of file names
+         Returns:
+         Array[Array[string]]: list of file name pairs
+    """
     filters = ['HIA', 'OI', 'CH4', 'NH3']
     res = []
     for filter in filters:
@@ -20,6 +27,14 @@ def getFilePairs(files):
         res.append(filePair)
     return res
 def averageDates(datestr1, datestr2, format):
+    """
+         Averages dates and outputs result in specified format
+         Parameters:
+         datestr1, datestr2 (string): dates to average
+         format (string): output date format
+         Returns:
+         String: average date
+    """
     #loses a microsecond
     date1 = datetime.fromisoformat(datestr1)
     date2 = datetime.fromisoformat(datestr2)
@@ -27,6 +42,7 @@ def averageDates(datestr1, datestr2, format):
     return avgDate.strftime(format)
 
 def averageCameraDates(newHdr, hdr1, hdr2, key):
+    
     prefix = "HIERARCH SHRPCAP "
     newHdr[prefix + key] = averageDates(hdr1[prefix + key], hdr2[prefix + key], "%Y-%m-%dT%H:%M:%S.%f") + "Z"
 
