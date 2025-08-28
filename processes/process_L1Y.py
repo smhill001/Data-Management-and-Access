@@ -7,6 +7,7 @@ from datetime import datetime
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 #drop units
+#def generateFileName(obskey, name)
 def getFilePairs(files):
     filters = ['HIA', 'OI', 'CH4', 'NH3']
     res = []
@@ -63,7 +64,7 @@ def process_L1Y(obskey="20250116UTa"):
     def avgData(extension, f1, f2):
         data1 = f1[extension].data
         data2 = f2[extension].data
-        return  np.array((PMImgdata1 + PMImgdata2) / 2)
+        return  np.array((data1 + data2) / 2)
     for f1, f2 in filePairs:
         hdul1 = fits.open(PMpath+ '/' + f1)
         hdul2 = fits.open(PMpath+ '/' + f2)
@@ -109,7 +110,7 @@ def process_L1Y(obskey="20250116UTa"):
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
         
         #print(repr(hdr))
-
+        fnout='New.FITS'
 
         
         
