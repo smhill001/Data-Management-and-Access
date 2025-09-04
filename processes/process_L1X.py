@@ -10,7 +10,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     file_list=s.getL1AProcessingFiles(l1Files)[obskey]
     camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
-    planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+    #planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
 
     First=True
    

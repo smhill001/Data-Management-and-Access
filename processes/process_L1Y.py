@@ -109,7 +109,7 @@ def createFileName(f1, f2):
 
 
 
-def process_L1Y(obskey="20250116UTa"):
+def process_L1Y(obskey="20250117UTa"):
     
     PMpath='./FITS/' + obskey + '/'
     files = os.listdir(PMpath)
@@ -160,7 +160,7 @@ def process_L1Y(obskey="20250116UTa"):
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
         fnout = createFileName(f1, f2)
-        #print(repr(hdr))
+        print(repr(hdr))
         #indices?
         
         hdul.writeto(PMpath+fnout,overwrite=True)
