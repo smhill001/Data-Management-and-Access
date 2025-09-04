@@ -46,7 +46,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
         #print("2##########observation.backplanes=",observation.backplanes.keys())
         
         if First:
-            coords = observation.run_gui()
+            #coords = observation.run_gui()
             #print("coords",coords)
             params=observation.get_disc_params()
             print("######### params1=",params)

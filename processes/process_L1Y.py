@@ -42,7 +42,7 @@ def averageDates(datestr1, datestr2, format):
     return avgDate.strftime(format)
 
 def averageCameraDates(newHdr, hdr1, hdr2, key):
-    
+
     prefix = "HIERARCH SHRPCAP "
     newHdr[prefix + key] = averageDates(hdr1[prefix + key], hdr2[prefix + key], "%Y-%m-%dT%H:%M:%S.%f") + "Z"
 
@@ -56,6 +56,10 @@ def sumHdrNum(newHdr, hdr1, hdr2, key):
 
 #finds midpoint
 def averageCoors(newHdr, hdr1, hdr2):
+    """
+         Averages RA and Dec from headers and put both result into new header
+         
+    """
     ra1 = hdr1["HIERARCH SHRPCAP RA"]
     ra2 = hdr2["HIERARCH SHRPCAP RA"] 
     dec1 =  hdr1["HIERARCH SHRPCAP Dec"].split(' ')[0]
@@ -73,6 +77,36 @@ def avgData(extension, f1, f2):
         data1 = f1[extension].data
         data2 = f2[extension].data
         return  np.array((data1 + data2) / 2)
+
+
+def createFileName(f1, f2):
+    """
+    Creates file name for calibrated L1 map file
+    Parameters:
+    f1(string): file name
+    f2(string): file name
+    Returns:
+    string: file name with date averaged from inputs and L1 Map suffix inserted
+    """
+    f1Seconds = str(int((float(f1[16]) * 0.1) * 60)).zfill(2)
+    f2Seconds = str(int((float(f2[16]) * 0.1) * 60)).zfill(2)
+    fileDate = averageDates(f1[:15] + f1Seconds, f2[:15] + f2Seconds, "%Y-%m-%d-%H%M%S")
+    seconds = str(int((float(fileDate[16:]) / 60) * 10))
+    filterIndex = f1.find("Jupiter_") + 8
+    filter = f1[filterIndex: f1.find("-", filterIndex)]
+    fnout = fileDate[:15] + "_" + seconds + "-Jupiter_" + filter + "_L1Map.fits"
+    return fnout
+  
+    
+
+
+
+
+
+
+
+
+
 
 
 def process_L1Y(obskey="20250116UTa"):
@@ -99,7 +133,6 @@ def process_L1Y(obskey="20250116UTa"):
         hdr1, hdr2 = hdul1[0].header, hdul2[0].header
         hdul[0].header = hdul1[0].header
         hdr = hdul[0].header
-        print(hdr1["HIERARCH SHRPCAP Duration"])
         hdr["DATE-OBS"] = averageDates(hdr1["DATE-OBS"], hdr2["DATE-OBS"], "%Y-%m-%dT%H:%M:%S.%f")
         averageCameraDates(hdr, hdr1, hdr2, "TimeStamp")
         averageCameraDates(hdr, hdr1, hdr2, "StartCapture")
@@ -126,12 +159,13 @@ def process_L1Y(obskey="20250116UTa"):
         key = "HIERARCH SHRPCAP Duration"
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
-        print(hdr[key])
+        fnout = createFileName(f1, f2)
         #print(repr(hdr))
         #indices?
-        fileDate = averageDates(f1[:15], f2[:15], "%Y-%m-%d-%H%M")
-        fnout = fileDate + f1[17:]
+        
         hdul.writeto(PMpath+fnout,overwrite=True)
+        
+        
 
         
         
