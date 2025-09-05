@@ -5,6 +5,7 @@ import planetmapper as pm
 # (1) Level 3 FITS image file example. One data array. Show data image and header metadata
 
 L3FITSpath='./Data_Samples/L3 FITS/'
+pm.set_kernel_path('~/Jupiter/Data-Management-and-Access')
 
 PCloudhdulist=fits.open(L3FITSpath+'2025-01-16-0038_0-Jupiter_Img_L3PCld_S0.fits')
 PCloudhdulist.info()
@@ -15,7 +16,7 @@ PCloudhdulist.close()
 fig1,axs1=pl.subplots(1,1,figsize=(6,6), dpi=150, facecolor="white")
 
 axs1.imshow(PClouddata)
-
+pl.show()
 print(PCloudhdr.keys)
 
 # (2) Level 3 FITS map file example. Two data arrays. Show data maps and header metadata
@@ -37,9 +38,9 @@ axs2b.imshow(PClouddata1)
 print(PCloudhdr.keys)
 
 # (3) PlanetMapper Image
-PMpath='./'
+PMpath='./FITS/20250116UTa/'
 
-PMImghdulist=fits.open(PMpath+'2025-01-16-0055_1-Jupiter_450BLU-FlatStack600_WV3x20-Aligned.fits')
+PMImghdulist=fits.open(PMpath+'2025-01-16-0043-Jupiter_647NH3-FlatStack600-Alignedmap.fits')
 PMImghdulist.info()
 PMImghdr=PMImghdulist[0].header
 PMImgdata=PMImghdulist[0].data      #Image
@@ -65,7 +66,7 @@ hdul = fits.HDUList([hdu,secondarray])
 hdul[0].header=PMImghdr
 hdul[0].header['NEW']='A NEW keyword'
 
-"""
+
 body = pm.BodyXY('Jupiter', hdul[0].header['HIERARCH PLANMAP UTC-OBS'])
 
 print(hdul[0].header)
@@ -79,11 +80,13 @@ print("body.subpoint_lon=",body.subpoint_lon)
 print("body.subpoint_lat=",body.subpoint_lat)
 
 print()
-"""  
+ 
 fnout='New.FITS'
 
 hdul.writeto(PMpath+fnout,overwrite=True)
+
 hdul.close()
+
 
 # View primary, extension arrays and header with QFitsView
 
