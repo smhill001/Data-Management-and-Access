@@ -1,0 +1,15 @@
+Project 8:
+
+Now that we've got good merged data maps of the radiance, or brightness of Jupiter, we can compute the reduced transmission of the reflected clouds due to absorption by methane and ammonia. This will yield the L2 products, a real accomplishment!!! 
+
+We will first need to modify the L1Y processing to normalize the output maps. That is, the mapped brightness values should be divided by the average brightness of the images of Jupiter. The easiest way to do this, I think, is when you do the L1Y process. 
+
+The steps that need to be done are:
+1) After reading the pair of Jupiter images to be combined, determine the average brightness of each. This can be done by averaging all radiance pixels where the emission angle (found in the extension) is greater less than say 85 degrees. We may have to play with that value a bit. We want to get close to the edge of Jupiter, but not at the edge. Then divide the radiance data array by the average radiance pixel value. This needs to be done for each of the four pairs of science files.
+2) As a check, the resulting average brightness of the normalized Jupiter images, before converting to maps, should be 1.0. Then we can proceed with calibration to compute transmission.
+3) For methane, this is simple: Divide the methane map (620 nm) by the 632 nm continuum map and multiply by 0.897
+4) For ammonia, we need to create a wavelength averaged continuum file from the 632 and 656 nm filters. This can be done by (1-X)R632+X*R656), where X=(647 – 632)/(656 – 632) and R632 and R656 are the radiance maps in those filters. Then, we divide the ammonia map (647 nm) by this new continuum image and multiply by 0.964. 
+5) File naming convention will follow the current L2 convention
+6) For the FITS headers, average the date-time values (if they are different in the input files - they should be almost exactly the same). 
+
+ 
