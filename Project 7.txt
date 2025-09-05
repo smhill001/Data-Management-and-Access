@@ -1,6 +1,4 @@
 Project 7:
-This project is aimed at consolidating the definitive radiance (aka brightness) maps from four pairs of science images. 
-This will give each of the four filters in approximately the same central time of observation, making it easier to do math operations without extra considerations for the rotation of Jupiter. Once the radiance maps are made, we can then produce the science data, first the transmission images for methane and ammonia, then the cloud pressures and ammonia abundance. To consolidate the radiance image pairs, we need to do some averaging and some summing of data and metadata as described below. 
 
 Read pairs of science FITS *map* files, e.g., a pair 656HIA map files. Create a new FITS map file by:
 1) Averaging the primary data arrays and writing it as the new primary data array
@@ -12,8 +10,7 @@ Read pairs of science FITS *map* files, e.g., a pair 656HIA map files. Create a 
 
 Update the header:
 1) Add the two file names that are the source for this file
-2) Average the datetime values: These are DATE-OBS, TimeStamp, StartCapture, MidCapture, EndCapture, JDStartCapture, JDMidCapture, JDEndCapture, UTC-OBS, 
-ET-OBS
+2) Average the datetime values: These are DATE-OBS, TimeStamp, StartCapture, MidCapture, EndCapture, JDStartCapture, JDMidCapture, JDEndCapture, UTC-OBS, ET-OBS
 3) Other parameters in the header to average are:Temperature, Focuser Temperature, RA, Dec
 4) Sum the following parameters: Duration, FrameCount, SUBPOINT LAT, SUBPOINT LON, SUBSOL LAT, SUBSOL LON, LIGHT-TIME, DISTANCE
 
