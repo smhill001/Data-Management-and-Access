@@ -96,20 +96,29 @@ def createFileName(f1, f2):
     filter = f1[filterIndex: f1.find("-", filterIndex)]
     fnout = fileDate[:15] + "_" + seconds + "-Jupiter_" + filter + "_L1Map.fits"
     return fnout
-  
-    
 
 
+def normalizeBrightness(radianceArr, emissionArr):
+    print(emissionArr.shape)
+    rows = radianceArr.shape[1]
+    cols = radianceArr.shape[2]
+    radianceSum = 0
+    radianceCount = 0
+   
+    for r in range(rows):
+        for c in range(cols):
+            if emissionArr.data[r][c] < 85:
+                radianceSum += radianceArr.data[0][r][c]
+                radianceCount += 1
+    avgRadiance = radianceSum / radianceCount
+    print(np.array(radianceArr.data / avgRadiance))
+    return np.array(radianceArr.data / avgRadiance)
 
+    #print(radianceArr.data)
+    #print(incidenceArr.data)
+    #print(emissionArr.data)
 
-
-
-
-
-
-
-
-def process_L1Y(obskey="20250117UTa"):
+def process_L1Y(obskey="20250116UTa"):
     
     PMpath='./FITS/' + obskey + '/'
     files = os.listdir(PMpath)
@@ -120,13 +129,16 @@ def process_L1Y(obskey="20250117UTa"):
         hdul1 = fits.open(PMpath+ '/' + f1)
         hdul2 = fits.open(PMpath+ '/' + f2)
         
-        
-        
         hdu = fits.PrimaryHDU(avgData(0, hdul1, hdul2))
+        #print(hdul1[0].data)
         lonArr = fits.ImageHDU(hdul1[1].data)
         latArr = fits.ImageHDU(hdul2[2].data)
+        #print(hdul1[3].data)
         incidenceArr = fits.ImageHDU(avgData(3, hdul1, hdul2))
         emissionArr = fits.ImageHDU(avgData(4, hdul1, hdul2))
+        #print(np.array(emissionArr)
+        
+        #print(emissionArr.data)
 
 
         hdul = fits.HDUList([hdu, lonArr, latArr, incidenceArr, emissionArr])
@@ -160,10 +172,12 @@ def process_L1Y(obskey="20250117UTa"):
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
         fnout = createFileName(f1, f2)
-        print(repr(hdr))
+        #print(repr(hdr))
         #indices?
-        
+        normalizedArr = normalizeBrightness(hdul[0], hdul[4])
         hdul.writeto(PMpath+fnout,overwrite=True)
+        
+        #print(hdul.info())
         
         
 
