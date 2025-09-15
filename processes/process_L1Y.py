@@ -26,6 +26,8 @@ def getFilePairs(files):
        
         res.append(filePair)
     return res
+
+
 def averageDates(datestr1, datestr2, format):
     """
          Averages dates and outputs result in specified format
@@ -99,7 +101,6 @@ def createFileName(f1, f2):
 
 
 def normalizeBrightness(radianceArr, emissionArr):
-    print(emissionArr.shape)
     rows = radianceArr.shape[1]
     cols = radianceArr.shape[2]
     radianceSum = 0
@@ -111,12 +112,9 @@ def normalizeBrightness(radianceArr, emissionArr):
                 radianceSum += radianceArr.data[0][r][c]
                 radianceCount += 1
     avgRadiance = radianceSum / radianceCount
-    print(np.array(radianceArr.data / avgRadiance))
+    print(avgRadiance)
     return np.array(radianceArr.data / avgRadiance)
 
-    #print(radianceArr.data)
-    #print(incidenceArr.data)
-    #print(emissionArr.data)
 
 def process_L1Y(obskey="20250116UTa"):
     
@@ -130,16 +128,14 @@ def process_L1Y(obskey="20250116UTa"):
         hdul2 = fits.open(PMpath+ '/' + f2)
         
         hdu = fits.PrimaryHDU(avgData(0, hdul1, hdul2))
-        #print(hdul1[0].data)
+        
         lonArr = fits.ImageHDU(hdul1[1].data)
         latArr = fits.ImageHDU(hdul2[2].data)
-        #print(hdul1[3].data)
+       
         incidenceArr = fits.ImageHDU(avgData(3, hdul1, hdul2))
         emissionArr = fits.ImageHDU(avgData(4, hdul1, hdul2))
-        #print(np.array(emissionArr)
-        
-        #print(emissionArr.data)
-
+        #average radiance
+       
 
         hdul = fits.HDUList([hdu, lonArr, latArr, incidenceArr, emissionArr])
         hdr1, hdr2 = hdul1[0].header, hdul2[0].header
@@ -174,7 +170,10 @@ def process_L1Y(obskey="20250116UTa"):
         fnout = createFileName(f1, f2)
         #print(repr(hdr))
         #indices?
-        normalizedArr = normalizeBrightness(hdul[0], hdul[4])
+        hdul[0].data = normalizeBrightness(hdu, emissionArr)
+        #check for average radiance = 1
+        normalizeBrightness(hdul[0], emissionArr)
+        
         hdul.writeto(PMpath+fnout,overwrite=True)
         
         #print(hdul.info())
