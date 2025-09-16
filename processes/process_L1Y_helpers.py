@@ -14,7 +14,6 @@ def getNH3WaveContData(NH3Map, IOMap, HIAMap):
     x = (647 - 632) / (656-632)
     a = (1-x) * (IOMap)
     b = x * HIAMap
-    print(NH3Map / (a + b))
     return NH3Map / (a + b)
    
 
@@ -111,6 +110,16 @@ def createFileName(f1, f2):
     fnout = fileDate[:15] + "_" + seconds + "-Jupiter_" + filter + "_L1Map.fits"
     return fnout
 
+def createL2FileName(f1, f2):
+    f1Seconds = str(int((float(f1[16]) * 0.1) * 60)).zfill(2)
+    f2Seconds = str(int((float(f2[16]) * 0.1) * 60)).zfill(2)
+    fileDate = averageDates(f1[:15] + f1Seconds, f2[:15] + f2Seconds, "%Y-%m-%d-%H%M%S")
+    seconds = str(int((float(fileDate[16:]) / 60) * 10))
+    filterIndex = f1.find("Jupiter_") + 8
+    filter = f1[filterIndex + 3: f1.find("-", filterIndex)]
+    fnout = fileDate[:15] + "_" + seconds + "-Jupiter_Map_L2T" + filter + ".fits"
+    return fnout
+
 
 def normalizeBrightness(radianceArr, emissionArr):
     rows = radianceArr.shape[1]
@@ -124,5 +133,5 @@ def normalizeBrightness(radianceArr, emissionArr):
                 radianceSum += radianceArr.data[0][r][c]
                 radianceCount += 1
     avgRadiance = radianceSum / radianceCount
-    print(avgRadiance)
+  
     return np.array(radianceArr.data / avgRadiance)

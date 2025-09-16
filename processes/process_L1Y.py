@@ -61,7 +61,12 @@ def process_L1Y(obskey="20250116UTa"):
         key = "HIERARCH SHRPCAP Duration"
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
+
         fnout = hp.createFileName(f1, f2)
+        hdul.writeto(PMpath+fnout,overwrite=True)   
+
+        fnout = hp.createL2FileName(f1, f2)
+        
         #print(repr(hdr))
         
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
@@ -75,11 +80,8 @@ def process_L1Y(obskey="20250116UTa"):
             HIAContData = hdul[0].data
         if("NH3" in fnout):
             hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
-         
-
-        print(f1)
-
-        hdul.writeto(PMpath+fnout,overwrite=True)      
+        hdul.writeto(PMpath+fnout,overwrite=True)     
+        hdul.close() 
         hdul1.close()
         hdul2.close()
 
