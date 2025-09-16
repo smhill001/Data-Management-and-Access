@@ -6,6 +6,19 @@ import numpy as np
 from datetime import datetime
 from astropy.coordinates import SkyCoord
 import astropy.units as u
+
+def getMethaneTransmission(methaneMap, contMap):
+    return np.array((methaneMap / contMap) * 0.897) 
+def getNH3WaveContData(NH3Map, IOMap, HIAMap):
+     #(1-X)R632+X*R656), where X=(647 – 632)/(656 – 632) 
+    x = (647 - 632) / (656-632)
+    a = (1-x) * (IOMap)
+    b = x * HIAMap
+    print(NH3Map / (a + b))
+    return NH3Map / (a + b)
+   
+
+
 def getFilePairs(files):
     """
          Gets pairs of scientific files for each filter

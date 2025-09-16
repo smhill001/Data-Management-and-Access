@@ -15,7 +15,8 @@ def process_L1Y(obskey="20250116UTa"):
     files = os.listdir(PMpath)
     filePairs = hp.getFilePairs(files)
 
-    
+    OIContData = None
+    HIAContData = None
     for f1, f2 in filePairs:
         hdul1 = fits.open(PMpath+ '/' + f1)
         hdul2 = fits.open(PMpath+ '/' + f2)
@@ -62,24 +63,23 @@ def process_L1Y(obskey="20250116UTa"):
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
         fnout = hp.createFileName(f1, f2)
         #print(repr(hdr))
-        #indices?
+        
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
         #check for average radiance = 1
         hp.normalizeBrightness(hdul[0], emissionArr)
-        
-        hdul.writeto(PMpath+fnout,overwrite=True)
-        
-        #print(hdul.info())
-        
-        
+        if("OI" in fnout):
+            OIContData = hdul[0].data
+        if("CH4" in fnout):
+            hdul[0].data = hp.getMethaneTransmission(hdul[0].data,OIContData )
+        if("HIA" in fnout):
+            HIAContData = hdul[0].data
+        if("NH3" in fnout):
+            hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
+         
 
-        
-        
+        print(f1)
 
-        
-        
-        #hdul.writeto('new1.fits')
-      
+        hdul.writeto(PMpath+fnout,overwrite=True)      
         hdul1.close()
         hdul2.close()
 
