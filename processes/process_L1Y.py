@@ -11,7 +11,7 @@ import process_L1Y_helpers as hp
 
 def process_L1Y(obskey="20250116UTa"):
     
-    PMpath='./FITS/' + obskey + '/'
+    PMpath='../FITS/' + obskey + '/'
     files = os.listdir(PMpath)
     filePairs = hp.getFilePairs(files)
 
@@ -87,4 +87,4 @@ def process_L1Y(obskey="20250116UTa"):
 
 
     
-process_L1Y()
+#process_L1Y()
