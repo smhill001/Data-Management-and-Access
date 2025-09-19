@@ -32,11 +32,13 @@ for molecule in files:
     hdulist.close()
     
     fig1,axs1=pl.subplots(3,1,figsize=(4.0,6.0), dpi=150, facecolor="white",sharex=True)
+    fig1.suptitle(molecule)
     
     show0=axs1[0].imshow(datanewNH3[0,:,:],'gray',origin="lower",vmin=0.85,vmax=1.05)
     pl.colorbar(show0, 
                    orientation='vertical',cmap='gray',
                    ax=axs1[0],fraction=0.046, pad=0.04)
+    axs1[0].set_title("process_L1Y (Leah)")
     
     
     filename=pthref+files[molecule]["ref"]
@@ -52,9 +54,17 @@ for molecule in files:
     pl.colorbar(show1, 
                    orientation='vertical',cmap='gray',
                    ax=axs1[1],fraction=0.046, pad=0.04)
+    axs1[1].set_title("make_L2_abs_data (Steve)")
+
     show2=axs1[2].imshow(np.flip(datanewNH3[0,:,:],axis=0)/dataref,'coolwarm',vmin=0.9,vmax=1.1)
     pl.colorbar(show2, 
                    orientation='vertical',cmap='coolwarm',
                    ax=axs1[2],fraction=0.046, pad=0.04)
+    axs1[2].set_title("process_L1Y/make_L2_abs_data")
+    
+    pathout="C:/Astronomy/Projects/SAS 2021 Ammonia/Data-Management-and-Access/Tests/"
+    fig1.savefig(pathout+" "+molecule+".png",dpi=300)
+
+
 
 
