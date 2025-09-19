@@ -130,6 +130,7 @@ def normalizeBrightness(radianceArr, emissionArr):
     for r in range(rows):
         for c in range(cols):
             if emissionArr.data[r][c] < 85:
+            #if emissionArr.data[r][c] < 60:
                 radianceSum += radianceArr.data[0][r][c]
                 radianceCount += 1
     avgRadiance = radianceSum / radianceCount
