@@ -14,7 +14,9 @@ def getNH3WaveContData(NH3Map, IOMap, HIAMap):
     x = (647 - 632) / (656-632)
     a = (1-x) * (IOMap)
     b = x * HIAMap
-    return NH3Map / (a + b)
+    #a = (x) * (IOMap)
+    #b = (1-x) * HIAMap
+    return 0.964*NH3Map / (a + b)
    
 
 
@@ -129,10 +131,11 @@ def normalizeBrightness(radianceArr, emissionArr):
    
     for r in range(rows):
         for c in range(cols):
-            if emissionArr.data[r][c] < 85:
-            #if emissionArr.data[r][c] < 60:
+            #if emissionArr.data[r][c] < 85:
+            if emissionArr.data[r][c] < 80.:
                 radianceSum += radianceArr.data[0][r][c]
                 radianceCount += 1
     avgRadiance = radianceSum / radianceCount
+    print("*radianceCount ",radianceCount)
   
     return np.array(radianceArr.data / avgRadiance)
