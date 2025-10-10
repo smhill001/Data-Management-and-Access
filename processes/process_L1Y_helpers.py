@@ -7,8 +7,13 @@ from datetime import datetime
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 
+
+
 def getMethaneTransmission(methaneMap, contMap):
     return np.array((methaneMap / contMap) * 0.897) 
+def getNH3Calibration():
+    return (647 - 632) / (656-632)
+
 def getNH3WaveContData(NH3Map, IOMap, HIAMap):
      #(1-X)R632+X*R656), where X=(647 – 632)/(656 – 632) 
     x = (647 - 632) / (656-632)
@@ -94,7 +99,7 @@ def avgData(extension, f1, f2):
         return  np.array((data1 + data2) / 2)
 
 
-def createFileName(f1, f2):
+def createL1FileName(f1, f2):
     """
     Creates file name for calibrated L1 map file
     Parameters:
@@ -121,6 +126,7 @@ def createL2FileName(f1, f2):
     filter = f1[filterIndex + 3: f1.find("-", filterIndex)]
     fnout = fileDate[:15] + "_" + seconds + "-Jupiter_Map_L2T" + filter + ".fits"
     return fnout
+
 
 
 def normalizeBrightness(radianceArr, emissionArr):

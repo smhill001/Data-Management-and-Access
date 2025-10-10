@@ -7,16 +7,18 @@ from datetime import datetime
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 import process_L1Y_helpers as hp
+import cloud_pressure as cp
 
 
 def process_L1Y(obskey="20250116UTa"):
-    
-    PMpath='../FITS/' + obskey + '/'
+    PMpath='./FITS/' + obskey + '/'
     files = os.listdir(PMpath)
     filePairs = hp.getFilePairs(files)
 
     OIContData = None
     HIAContData = None
+    CH4ContData = None
+    NH3ContData = None
     for f1, f2 in filePairs:
         hdul1 = fits.open(PMpath+ '/' + f1)
         hdul2 = fits.open(PMpath+ '/' + f2)
@@ -62,25 +64,54 @@ def process_L1Y(obskey="20250116UTa"):
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
-        fnout = hp.createFileName(f1, f2)
+        fnout = hp.createL1FileName(f1, f2)
         hdul.writeto(PMpath+fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
-        
+        print(fnout)
         #print(repr(hdr))
         
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
-        #check for average radiance = 1
-        hp.normalizeBrightness(hdul[0], emissionArr)
+        #write l2 files
         if("OI" in fnout):
             OIContData = hdul[0].data
+            
         if("CH4" in fnout):
             hdul[0].data = hp.getMethaneTransmission(hdul[0].data,OIContData )
+            hdul[0].header["CALIBRAT"] = 0.897
+            CH4ContData = hdul[0].data
         if("HIA" in fnout):
             HIAContData = hdul[0].data
+            
         if("NH3" in fnout):
             hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
-        hdul.writeto(PMpath+fnout,overwrite=True)     
+            hdul[0].header["CALIBRAT"] = 0.964
+            NH3ContData = hdul[0].data
+        hdul.writeto(PMpath+fnout,overwrite=True) 
+
+        #write L3 files
+
+        if("CH4" in fnout):
+            hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)
+            print(hdul[0].data)
+            hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
+            hdul.writeto(fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
+        if("NH3" in fnout):
+             hdul[0].data = cp.computeAmmoniaMoleFraction(CH4ContData, hdul[0].data)
+             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
+             hdul[0].header["HIERARCH KEFF NH3647"] = 2.955
+             hdul.writeto(fnout[:30] + "L3fNH3_S0.fits",overwrite=True)
+           
+
+
+
+    #create l3 files
+    
+    
+    
+
+
+
         hdul.close() 
         hdul1.close()
         hdul2.close()
