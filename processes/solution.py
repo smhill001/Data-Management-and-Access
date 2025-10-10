@@ -536,8 +536,8 @@ with open('../Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
    """
-    #createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
-    #createYearsHistogram(d)
+    createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
+    createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
