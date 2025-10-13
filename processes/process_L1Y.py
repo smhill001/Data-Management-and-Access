@@ -11,8 +11,17 @@ import cloud_pressure as cp
 
 
 def process_L1Y(obskey="20250116UTa"):
-    PMpath='./FITS/' + obskey + '/'
-    files = os.listdir(PMpath)
+
+    #set up file structure
+    
+    PMpath='./FITS/' + obskey 
+    os.makedirs(PMpath + "/L1", exist_ok=True)
+    os.makedirs(PMpath + "/L2", exist_ok=True)
+    os.makedirs(PMpath + "/L3", exist_ok=True)
+
+
+
+    files = os.listdir(PMpath + "/unprocessed_L1")
     filePairs = hp.getFilePairs(files)
 
     OIContData = None
@@ -65,7 +74,7 @@ def process_L1Y(obskey="20250116UTa"):
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
         fnout = hp.createL1FileName(f1, f2)
-        hdul.writeto(PMpath+fnout,overwrite=True)   
+        hdul.writeto(PMpath+ "L1/" + fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
         print(fnout)
@@ -87,7 +96,7 @@ def process_L1Y(obskey="20250116UTa"):
             hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
             hdul[0].header["CALIBRAT"] = 0.964
             NH3ContData = hdul[0].data
-        hdul.writeto(PMpath+fnout,overwrite=True) 
+        hdul.writeto(PMpath + "L2/" + fnout,overwrite=True) 
 
         #write L3 files
 
@@ -95,23 +104,13 @@ def process_L1Y(obskey="20250116UTa"):
             hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)
             print(hdul[0].data)
             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
-            hdul.writeto(fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
+            hdul.writeto(PMpath + "L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
         if("NH3" in fnout):
              hdul[0].data = cp.computeAmmoniaMoleFraction(CH4ContData, hdul[0].data)
              hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
              hdul[0].header["HIERARCH KEFF NH3647"] = 2.955
-             hdul.writeto(fnout[:30] + "L3fNH3_S0.fits",overwrite=True)
+             hdul.writeto(PMpath + "L3/" + fnout[:30] + "L3fNH3_S0.fits",overwrite=True)
            
-
-
-
-    #create l3 files
-    
-    
-    
-
-
-
         hdul.close() 
         hdul1.close()
         hdul2.close()

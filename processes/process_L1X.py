@@ -12,7 +12,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     file_list=s.getL1AProcessingFiles(l1Files)[obskey]
     camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
-    #planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+    planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
 
     First=True
    
@@ -77,7 +77,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
                     value = pair[pair.index('=') + 1:]
                     observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
         
-        dir_path = '../FITS/' + obskey
+        dir_path = '../FITS/' + obskey +"/unprocessed_L1"
         os.makedirs(dir_path, exist_ok = True)
         observation.save_observation(dir_path + "/" + fn.replace(".png",".fits"))
         observation.save_mapped_observation(dir_path + "/" + fn.replace(".png","map.fits"))
@@ -98,4 +98,4 @@ def formatType(value):
    
     return value.strip()
 
-#process_L1X()
+process_L1X()
