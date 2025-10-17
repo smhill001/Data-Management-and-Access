@@ -29,8 +29,8 @@ def process_L1Y(obskey="20250116UTa"):
     CH4ContData = None
     NH3ContData = None
     for f1, f2 in filePairs:
-        hdul1 = fits.open(PMpath+ '/' + f1)
-        hdul2 = fits.open(PMpath+ '/' + f2)
+        hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
+        hdul2 = fits.open(PMpath+ '/unprocessed_L1/' + f2)
         
         hdu = fits.PrimaryHDU(hp.avgData(0, hdul1, hdul2))
         
@@ -74,7 +74,7 @@ def process_L1Y(obskey="20250116UTa"):
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
         fnout = hp.createL1FileName(f1, f2)
-        hdul.writeto(PMpath+ "L1/" + fnout,overwrite=True)   
+        hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
         print(fnout)
@@ -96,20 +96,23 @@ def process_L1Y(obskey="20250116UTa"):
             hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
             hdul[0].header["CALIBRAT"] = 0.964
             NH3ContData = hdul[0].data
-        hdul.writeto(PMpath + "L2/" + fnout,overwrite=True) 
+        hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
 
         #write L3 files
 
         if("CH4" in fnout):
             hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)
             print(hdul[0].data)
+            print("hello")
+            print(hdul[0].data)
             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
-            hdul.writeto(PMpath + "L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
+            hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
         if("NH3" in fnout):
              hdul[0].data = cp.computeAmmoniaMoleFraction(CH4ContData, hdul[0].data)
+             print(hdul[0].data)
              hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
              hdul[0].header["HIERARCH KEFF NH3647"] = 2.955
-             hdul.writeto(PMpath + "L3/" + fnout[:30] + "L3fNH3_S0.fits",overwrite=True)
+             hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3fNH3_S0.fits",overwrite=True)
            
         hdul.close() 
         hdul1.close()
