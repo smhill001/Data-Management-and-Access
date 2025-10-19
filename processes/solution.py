@@ -416,7 +416,7 @@ def sortFilesByDate(files):
     return files
 
 
-l1Files = os.listdir("./Data_Samples/20250117UT")
+l1Files = os.listdir("../Data_Samples/20250117UT")
 
 
 #creates json file with incomplete property for keys with missing files
@@ -428,7 +428,7 @@ def obsToJSON():
    
 
     """
-    with open('./observations.json', 'w', encoding='utf-8') as f:
+    with open('../observations.json', 'w', encoding='utf-8') as f:
         json.dump(getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
     
 obsToJSON()
@@ -526,7 +526,7 @@ def createHistogram(data, yearArr):
 
 
 
-with open('./Data_Samples/Catalog.json') as f:
+with open('../Data_Samples/Catalog.json') as f:
     d = json.load(f)
     """
     print()
@@ -536,12 +536,12 @@ with open('./Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
    """
-    #createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
-    #createYearsHistogram(d)
+    createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
+    createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
-l1Files = os.listdir("./Data_Samples/20250116UT")
+l1Files = os.listdir("../Data_Samples/20250116UT")
 fwkw=filterByKeyword(getCameraObservations(l1Files), '685NIR')
 #print(fwkw)
 

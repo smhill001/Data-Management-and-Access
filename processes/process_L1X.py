@@ -2,15 +2,17 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     
     import planetmapper
     import os
-    import solution as s
+    import sys
+    sys.path.append('../processes')
     
+    import solution as s     
     
-    path="./Data_Samples/20250116UT/"
+    path="../Data_Samples/20250116UT/"
     l1Files = os.listdir(path)
     file_list=s.getL1AProcessingFiles(l1Files)[obskey]
     camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
-    #planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+    planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
 
     First=True
    
@@ -46,7 +48,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
         #print("2##########observation.backplanes=",observation.backplanes.keys())
         
         if First:
-            #coords = observation.run_gui()
+            coords = observation.run_gui()
             #print("coords",coords)
             params=observation.get_disc_params()
             print("######### params1=",params)
@@ -75,11 +77,13 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
                     value = pair[pair.index('=') + 1:]
                     observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
         
-        dir_path = 'FITS/' + obskey
+        dir_path = '../FITS/' + obskey +"/unprocessed_L1"
         os.makedirs(dir_path, exist_ok = True)
         observation.save_observation(dir_path + "/" + fn.replace(".png",".fits"))
         observation.save_mapped_observation(dir_path + "/" + fn.replace(".png","map.fits"))
         First=False
+        
+        
 def formatType(value):
     """
     Converts string content to proper type
