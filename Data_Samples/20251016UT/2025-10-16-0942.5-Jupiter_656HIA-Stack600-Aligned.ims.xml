@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WinJUPOS Version="12.3.12">
+  <ImageMeasurementSettings Version="1">
+    <FileName>C:\Astronomy\Projects\Planets\Jupiter\Imaging Data\20251016UT\2025-10-16-0942_5-Jupiter_656HIA-Stack600-Aligned.png</FileName>
+    <Body>Jupiter</Body>
+    <JulianDateUT>2460964.90451</JulianDateUT>
+    <ObservingPlace>Earth</ObservingPlace>
+    <GeoLongDeg>15.00000</GeoLongDeg>
+    <GeoLatDeg>50.00000</GeoLatDeg>
+    <Observer>Jupiter_656HIA</Observer>
+    <ImageInfo>Stack600-Aligned</ImageInfo>
+    <ColorChannel>Color</ColorChannel>
+    <CenterXPixel>152.2</CenterXPixel>
+    <CenterYPixel>169.2</CenterYPixel>
+    <EquatorialRadiusPixel>72.9</EquatorialRadiusPixel>
+    <RotationAngleDeg>-17.934</RotationAngleDeg>
+    <DistanceRatioXToYOfSensorElements>1.000000</DistanceRatioXToYOfSensorElements>
+    <MirroredInvertedImage>False</MirroredInvertedImage>
+    <InverseLongitudes>False</InverseLongitudes>
+    <CM1Deg>280.63</CM1Deg>
+    <CM2Deg>23.18</CM2Deg>
+    <CM3Deg>250.52</CM3Deg>
+    <q>0.9351256575</q>
+    <DeclinationOfEarthOnPlanetDeg>1.50</DeclinationOfEarthOnPlanetDeg>
+  </ImageMeasurementSettings>
+</WinJUPOS>
