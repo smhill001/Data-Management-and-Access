@@ -77,7 +77,7 @@ def process_L1Y(obskey="20250116UTa"):
         hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
-        print(fnout)
+     
         #print(repr(hdr))
         
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
@@ -102,14 +102,12 @@ def process_L1Y(obskey="20250116UTa"):
 
         if("CH4" in fnout):
             hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)
-            print(hdul[0].data)
-            print("hello")
-            print(hdul[0].data)
+            print(np.nanmax(hdul[0].data))
+           
             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
             hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
         if("NH3" in fnout):
              hdul[0].data = cp.computeAmmoniaMoleFraction(CH4ContData, hdul[0].data)
-             print(hdul[0].data)
              hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
              hdul[0].header["HIERARCH KEFF NH3647"] = 2.955
              hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3fNH3_S0.fits",overwrite=True)

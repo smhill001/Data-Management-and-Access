@@ -12,6 +12,7 @@ K_eff_CH4620 = 0.427
 K_eff_NH3647 = 2.955
 
 def computeCloudPressure(CH4data, NH3data):
+    print(STP)
     #compute ammonia optical depth according to Beer-Lambert law
     CH4_tau = -np.log(CH4data)
     NH3_tau = -np.log(NH3data) 
@@ -24,7 +25,7 @@ def computeCloudPressure(CH4data, NH3data):
     #compute cloud pressure - CH4_Cloud_Press is computed in units of mb
     CH4_Cloud_Press = CH4_Ncol*amagat*gravity*mean_mol_wt/(fCH4*STP)
    
-    return CH4_Cloud_Press
+    return CH4_Cloud_Press/2
         
 def computeAmmoniaMoleFraction(CH4data, NH3data):
     #compute ammonia optical depth according to Beer-Lambert law
@@ -38,7 +39,7 @@ def computeAmmoniaMoleFraction(CH4data, NH3data):
     CH4_Ncol = 1000*CH4_tau/K_eff_CH4620 
     NH3_Ncol = 1000*NH3_tau/K_eff_NH3647
     fNH3=fCH4*NH3_Ncol/CH4_Ncol
-    print(fNH3)
+    
     return fNH3
 
 #compute ammonia mole fraction - ratio of column densities multiplied by methane mole fraction
