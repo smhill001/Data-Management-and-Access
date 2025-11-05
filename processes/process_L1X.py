@@ -1,5 +1,7 @@
-def process_L1X(obskey="20250116UTa",planet='Jupiter'):
-    
+def process_L1X(obskey, file_list, camera_obs_list, obs):
+    print(obskey)
+    print("hello there")
+    print("yo")
     import planetmapper
     import os
     import sys
@@ -7,19 +9,20 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
     
     import solution as s     
     
-    path="../Data_Samples/20250116UT/"
-    l1Files = os.listdir(path)
-    file_list=s.getL1AProcessingFiles(l1Files)[obskey]
-    camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
+    path="../Data_Samples/" + obskey + "/"
+    #l1Files = os.listdir(path)
+    #print(s.getL1AProcessingFiles(l1Files))
+    #file_list=s.getL1AProcessingFiles(l1Files)[obskey]
+    #camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
     
     planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
-
+  
     First=True
    
     for i, fn in enumerate(file_list):
         
         time=fn[0:10]+"T"+fn[11:13]+":"+fn[13:15]
-        observation = planetmapper.Observation(path+fn,target=planet,utc=time)
+        observation = planetmapper.Observation(path+fn,target="jupiter",utc=time)
         #print("1##########observation.backplanes=",list(observation.backplanes.keys()))
         
         del observation.backplanes['DOPPLER']
@@ -77,7 +80,7 @@ def process_L1X(obskey="20250116UTa",planet='Jupiter'):
                     value = pair[pair.index('=') + 1:]
                     observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
         
-        dir_path = '../FITS/' + obskey +"/unprocessed_L1"
+        dir_path = '../FITS/' + obskey + "/" + obs + "/unprocessed_L1/" 
         os.makedirs(dir_path, exist_ok = True)
         observation.save_observation(dir_path + "/" + fn.replace(".png",".fits"))
         observation.save_mapped_observation(dir_path + "/" + fn.replace(".png","map.fits"))
@@ -98,4 +101,3 @@ def formatType(value):
    
     return value.strip()
 
-process_L1X()

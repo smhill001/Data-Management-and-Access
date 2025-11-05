@@ -10,7 +10,11 @@ import astropy.units as u
 
 
 def getMethaneTransmission(methaneMap, contMap):
+
     return np.array((methaneMap / contMap) * 0.897) 
+
+
+
 def getNH3Calibration():
     return (647 - 632) / (656-632)
 
@@ -21,6 +25,7 @@ def getNH3WaveContData(NH3Map, IOMap, HIAMap):
     b = x * HIAMap
     #a = (x) * (IOMap)
     #b = (1-x) * HIAMap
+    print(0.964*NH3Map / (a + b))
     return 0.964*NH3Map / (a + b)
    
 
@@ -142,6 +147,6 @@ def normalizeBrightness(radianceArr, emissionArr):
                 radianceSum += radianceArr.data[0][r][c]
                 radianceCount += 1
     avgRadiance = radianceSum / radianceCount
-    print("*radianceCount ",radianceCount)
+   
   
     return np.array(radianceArr.data / avgRadiance)

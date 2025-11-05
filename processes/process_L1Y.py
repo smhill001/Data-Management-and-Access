@@ -10,16 +10,14 @@ import process_L1Y_helpers as hp
 import cloud_pressure as cp
 
 
-def process_L1Y(obskey="20250116UTa"):
+def process_L1Y(obskey, key):
 
     #set up file structure
     
-    PMpath='./FITS/' + obskey 
+    PMpath='../FITS/' + obskey + "/" + key
     os.makedirs(PMpath + "/L1", exist_ok=True)
     os.makedirs(PMpath + "/L2", exist_ok=True)
     os.makedirs(PMpath + "/L3", exist_ok=True)
-
-
 
     files = os.listdir(PMpath + "/unprocessed_L1")
     filePairs = hp.getFilePairs(files)
@@ -29,6 +27,8 @@ def process_L1Y(obskey="20250116UTa"):
     CH4ContData = None
     NH3ContData = None
     for f1, f2 in filePairs:
+        print(f1)
+        print(f2)
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
         hdul2 = fits.open(PMpath+ '/unprocessed_L1/' + f2)
         
@@ -74,18 +74,21 @@ def process_L1Y(obskey="20250116UTa"):
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
         fnout = hp.createL1FileName(f1, f2)
+        print(hdr)
         hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
      
         #print(repr(hdr))
-        
+        if("CH4" in fnout):
+            print(hdul[0].data)
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
         #write l2 files
         if("OI" in fnout):
             OIContData = hdul[0].data
             
         if("CH4" in fnout):
+            print(hdul[0].data)
             hdul[0].data = hp.getMethaneTransmission(hdul[0].data,OIContData )
             hdul[0].header["CALIBRAT"] = 0.897
             CH4ContData = hdul[0].data
@@ -101,9 +104,7 @@ def process_L1Y(obskey="20250116UTa"):
         #write L3 files
 
         if("CH4" in fnout):
-            hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)
-            print(np.nanmax(hdul[0].data))
-           
+            hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)           
             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
             hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
         if("NH3" in fnout):
@@ -118,4 +119,3 @@ def process_L1Y(obskey="20250116UTa"):
 
 
     
-process_L1Y()
