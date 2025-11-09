@@ -1,7 +1,6 @@
 def process_L1X(obskey, file_list, camera_obs_list, obs):
     print(obskey)
-    print("hello there")
-    print("yo")
+ 
     import planetmapper
     import os
     import sys
