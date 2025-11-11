@@ -1,29 +1,40 @@
-def process_L1X(obskey, file_list, camera_obs_list, obs):
+import planetmapper
+import os
+import sys
+First = True
+params = []
+def process_L1X(obskey):
     print(obskey)
  
-    import planetmapper
-    import os
-    import sys
+   
     sys.path.append('../processes')
     
     import solution as s     
     
     path="../Data_Samples/" + obskey + "/"
-    #l1Files = os.listdir(path)
-    #print(s.getL1AProcessingFiles(l1Files))
-    #file_list=s.getL1AProcessingFiles(l1Files)[obskey]
-    #camera_obs_list = s.getCameraObservations(l1Files)["data"][obskey]
+    l1Files = os.listdir(path)
+    obs_map = s.getL1AProcessingFiles(l1Files)
+    print(obs_map)
+    for obs in obs_map:
+            print(obs)
+          
+    '''for key in s.getL1AProcessingFiles(l1Files):
+        print(key)
+    obs_map=s.getL1AProcessingFiles(l1Files)[obskey]'''
+    
     
     planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
-  
-    First=True
-   
-    for i, fn in enumerate(file_list):
+ 
+    
+    def createFits(file_list, camera_obs_list, obs):
+     global First
+     global params
+     for i, fn in enumerate(file_list):
         
         time=fn[0:10]+"T"+fn[11:13]+":"+fn[13:15]
         observation = planetmapper.Observation(path+fn,target="jupiter",utc=time)
         #print("1##########observation.backplanes=",list(observation.backplanes.keys()))
-        
+        params
         del observation.backplanes['DOPPLER']
         del observation.backplanes['LON-CENTRIC']
         del observation.backplanes['LAT-CENTRIC']
@@ -54,6 +65,7 @@ def process_L1X(obskey, file_list, camera_obs_list, obs):
             #print("coords",coords)
             params=observation.get_disc_params()
             print("######### params1=",params)
+            First = False
         else:
             observation.set_disc_params(params[0],params[1],params[2],params[3])
 
@@ -83,7 +95,18 @@ def process_L1X(obskey, file_list, camera_obs_list, obs):
         os.makedirs(dir_path, exist_ok = True)
         observation.save_observation(dir_path + "/" + fn.replace(".png",".fits"))
         observation.save_mapped_observation(dir_path + "/" + fn.replace(".png","map.fits"))
-        First=False
+
+
+ 
+    
+    for obs in obs_map:
+        print(obs)
+        file_list = obs_map[obs]
+        #params out of range
+        camera_obs_list = s.getCameraObservations(l1Files)["data"][obs]
+        createFits(file_list, camera_obs_list,obs)
+        First = False
+       
         
         
 def formatType(value):
@@ -99,4 +122,3 @@ def formatType(value):
         return float(value)
    
     return value.strip()
-
