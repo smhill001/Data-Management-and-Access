@@ -4,9 +4,6 @@ import sys
 First = True
 params = []
 def process_L1X(obskey):
-    print(obskey)
- 
-   
     sys.path.append('../processes')
     
     import solution as s     
@@ -14,18 +11,10 @@ def process_L1X(obskey):
     path="../Data_Samples/" + obskey + "/"
     l1Files = os.listdir(path)
     obs_map = s.getL1AProcessingFiles(l1Files)
-    print(obs_map)
-    for obs in obs_map:
-            print(obs)
-          
-    '''for key in s.getL1AProcessingFiles(l1Files):
-        print(key)
-    obs_map=s.getL1AProcessingFiles(l1Files)[obskey]'''
-    
     
     planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
  
-    
+    #outputs fits into unprocessed_l1 file
     def createFits(file_list, camera_obs_list, obs):
      global First
      global params
@@ -75,6 +64,7 @@ def process_L1X(obskey):
         
         #populate header with camera metadata
         camera_file = camera_obs_list[i]
+
         with open(path + camera_file, 'r') as cf:
             for line in cf:
                 pair = line.strip()
@@ -98,11 +88,9 @@ def process_L1X(obskey):
 
 
  
-    
+    #creates fits files for each observation
     for obs in obs_map:
-        print(obs)
         file_list = obs_map[obs]
-        #params out of range
         camera_obs_list = s.getCameraObservations(l1Files)["data"][obs]
         createFits(file_list, camera_obs_list,obs)
         First = False
@@ -122,3 +110,4 @@ def formatType(value):
         return float(value)
    
     return value.strip()
+

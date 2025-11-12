@@ -13,7 +13,6 @@ import cloud_pressure as cp
 def process_L1Y(obskey, key):
 
     #set up file structure
-    
     PMpath='../FITS/' + obskey + "/" + key
     os.makedirs(PMpath + "/L1", exist_ok=True)
     os.makedirs(PMpath + "/L2", exist_ok=True)
@@ -41,7 +40,7 @@ def process_L1Y(obskey, key):
         emissionArr = fits.ImageHDU(hp.avgData(4, hdul1, hdul2))
         #average radiance
        
-
+        #populates header
         hdul = fits.HDUList([hdu, lonArr, latArr, incidenceArr, emissionArr])
         hdr1, hdr2 = hdul1[0].header, hdul2[0].header
         hdul[0].header = hdul1[0].header
