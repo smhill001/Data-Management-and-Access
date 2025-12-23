@@ -25,9 +25,8 @@ def process_L1Y(obskey, key):
     colorFiles = hp.getColorFiles(files)
 
 
-    #create processing files for rgb images
+    #create L1 and L2 fits files for rgb filters
     for file in colorFiles:
-        
         hdul = fits.open(PMpath+ '/unprocessed_L1/' + file)
         fnout = file[:32] + "_L1Map.fits"
         hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)
@@ -35,13 +34,10 @@ def process_L1Y(obskey, key):
         hdul[0].data = hp.normalizeBrightness(hdul[0], hdul[4]) 
         hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
         
-
-
-    #create processing files for scientific filters
+    #create L1, L2, and L3 files for scientific filters
     OIContData = None
     HIAContData = None
     CH4ContData = None
-    NH3ContData = None
     for f1, f2 in filePairs:
         
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
@@ -88,10 +84,7 @@ def process_L1Y(obskey, key):
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
-        #colored files should do this to:
-        #append all output files and also colored files to array then do this
-        #outside of this scope
-        print(hp.createL1FileName(f1, f2))
+        #write L1 files
         fnout = hp.createL1FileName(f1, f2)
        
         hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)   
