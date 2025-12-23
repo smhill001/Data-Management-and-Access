@@ -25,9 +25,27 @@ def getNH3WaveContData(NH3Map, IOMap, HIAMap):
     b = x * HIAMap
     #a = (x) * (IOMap)
     #b = (1-x) * HIAMap
-    print(0.964*NH3Map / (a + b))
+   
     return 0.964*NH3Map / (a + b)
    
+def getColorFiles(files):
+    """
+         Gets the mapped color file for each filter
+
+         Parameters:
+         files (Array[string]): list of file names
+         Returns:
+         Array[string]: list of file names
+    """
+    color_filters = ['NIR', 'GRN', 'BLU']
+    res = []
+    for filter in color_filters:
+        for file in files:
+            if filter in file and "map.fits" in file:
+                res.append(file)
+        
+    return res
+
 
 
 def getFilePairs(files):
@@ -39,14 +57,15 @@ def getFilePairs(files):
          Returns:
          Array[Array[string]]: list of file name pairs
     """
-    filters = ['HIA', 'OI', 'CH4', 'NH3']
+    science_filters = ['HIA', 'OI', 'CH4', 'NH3']
+    
+    
     res = []
-    for filter in filters:
+    for filter in science_filters:
         filePair = []
         for file in files:
-            if filter in file and "map.fits" in file and file.count("_") == 2:
+            if filter in file and "map.fits" in file:
                 filePair.append(file)
-       
         res.append(filePair)
     return res
 
@@ -123,16 +142,14 @@ def createL1FileName(f1, f2):
     return fnout
 
 def createL2FileName(f1, f2):
+    filterIndex = f1.find("Jupiter_") + 8
+    filter = f1[filterIndex + 3: f1.find("-", filterIndex)]
     f1Seconds = str(int((float(f1[16]) * 0.1) * 60)).zfill(2)
     f2Seconds = str(int((float(f2[16]) * 0.1) * 60)).zfill(2)
     fileDate = averageDates(f1[:15] + f1Seconds, f2[:15] + f2Seconds, "%Y-%m-%d-%H%M%S")
     seconds = str(int((float(fileDate[16:]) / 60) * 10))
-    filterIndex = f1.find("Jupiter_") + 8
-    filter = f1[filterIndex + 3: f1.find("-", filterIndex)]
     fnout = fileDate[:15] + "_" + seconds + "-Jupiter_Map_L2T" + filter + ".fits"
     return fnout
-
-
 
 def normalizeBrightness(radianceArr, emissionArr):
     rows = radianceArr.shape[1]

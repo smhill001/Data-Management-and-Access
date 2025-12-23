@@ -13,6 +13,8 @@ import cloud_pressure as cp
 def process_L1Y(obskey, key):
 
     #set up file structure
+
+
     PMpath='../FITS/' + obskey + "/" + key
     os.makedirs(PMpath + "/L1", exist_ok=True)
     os.makedirs(PMpath + "/L2", exist_ok=True)
@@ -20,14 +22,28 @@ def process_L1Y(obskey, key):
 
     files = os.listdir(PMpath + "/unprocessed_L1")
     filePairs = hp.getFilePairs(files)
+    colorFiles = hp.getColorFiles(files)
 
+
+    #create processing files for rgb images
+    for file in colorFiles:
+        
+        hdul = fits.open(PMpath+ '/unprocessed_L1/' + file)
+        fnout = file[:32] + "_L1Map.fits"
+        hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)
+        fnout = file[:26] + "Map_L2T" + file[26:29] + ".fits"
+        hdul[0].data = hp.normalizeBrightness(hdul[0], hdul[4]) 
+        hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
+        
+
+
+    #create processing files for scientific filters
     OIContData = None
     HIAContData = None
     CH4ContData = None
     NH3ContData = None
     for f1, f2 in filePairs:
-        print(f1)
-        print(f2)
+        
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
         hdul2 = fits.open(PMpath+ '/unprocessed_L1/' + f2)
         
@@ -72,32 +88,32 @@ def process_L1Y(obskey, key):
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
+        #colored files should do this to:
+        #append all output files and also colored files to array then do this
+        #outside of this scope
+        print(hp.createL1FileName(f1, f2))
         fnout = hp.createL1FileName(f1, f2)
-        print(hdr)
+       
         hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
      
-        #print(repr(hdr))
-        if("CH4" in fnout):
-            print(hdul[0].data)
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
+
         #write l2 files
         if("OI" in fnout):
             OIContData = hdul[0].data
             
         if("CH4" in fnout):
-            print(hdul[0].data)
             hdul[0].data = hp.getMethaneTransmission(hdul[0].data,OIContData )
             hdul[0].header["CALIBRAT"] = 0.897
             CH4ContData = hdul[0].data
         if("HIA" in fnout):
             HIAContData = hdul[0].data
-            
         if("NH3" in fnout):
             hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
             hdul[0].header["CALIBRAT"] = 0.964
-            NH3ContData = hdul[0].data
+    
         hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
 
         #write L3 files

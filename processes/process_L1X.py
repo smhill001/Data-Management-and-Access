@@ -51,7 +51,6 @@ def process_L1X(obskey):
         
         if First:
             coords = observation.run_gui()
-            #print("coords",coords)
             params=observation.get_disc_params()
             print("######### params1=",params)
             First = False
