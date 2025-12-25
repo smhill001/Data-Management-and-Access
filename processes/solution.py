@@ -416,11 +416,11 @@ def sortFilesByDate(files):
     return files
 
 
-l1Files = os.listdir("../Data_Samples/20250117UT")
+#l1Files = os.listdir("../Data_Samples/20250117UT")
 
 
 #creates json file with incomplete property for keys with missing files
-def obsToJSON():
+def obsToJSON(files):
     """
     Side Effect: loads object with camera observations into a json 
     -data property with list of obskeys and their files array
@@ -429,10 +429,10 @@ def obsToJSON():
 
     """
     with open('../observations.json', 'w', encoding='utf-8') as f:
-        json.dump(getCameraObservations(l1Files), f, ensure_ascii=False, indent=4)
+        json.dump(getCameraObservations(files), f, ensure_ascii=False, indent=4)
     
-obsToJSON()
-getL1AProcessingFiles(l1Files)
+#obsToJSON()
+#getL1AProcessingFiles(l1Files)
 
 def createYearDatesArray(keys, year = None):
     """
@@ -536,8 +536,8 @@ with open('../Data_Samples/Catalog.json') as f:
     print(getAllBetweenDates(d, '2025-01-16', '2025-01-16'))
     print()
    """
-    createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
-    createYearsHistogram(d)
+    #createHistogram(d, ['2020','2021', '2022', '2023', '2024', '2025'])
+    #createYearsHistogram(d)
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     

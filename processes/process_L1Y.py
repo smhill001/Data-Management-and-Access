@@ -10,25 +10,36 @@ import process_L1Y_helpers as hp
 import cloud_pressure as cp
 
 
-def process_L1Y(obskey="20250116UTa"):
+def process_L1Y(obskey, key):
 
     #set up file structure
-    
-    PMpath='./FITS/' + obskey 
+
+
+    PMpath='../FITS/' + obskey + "/" + key
     os.makedirs(PMpath + "/L1", exist_ok=True)
     os.makedirs(PMpath + "/L2", exist_ok=True)
     os.makedirs(PMpath + "/L3", exist_ok=True)
 
-
-
     files = os.listdir(PMpath + "/unprocessed_L1")
     filePairs = hp.getFilePairs(files)
+    colorFiles = hp.getColorFiles(files)
 
+
+    #create L1 and L2 fits files for rgb filters
+    for file in colorFiles:
+        hdul = fits.open(PMpath+ '/unprocessed_L1/' + file)
+        fnout = file[:32] + "_L1Map.fits"
+        hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)
+        fnout = file[:26] + "Map_L2T" + file[26:29] + ".fits"
+        hdul[0].data = hp.normalizeBrightness(hdul[0], hdul[4]) 
+        hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
+        
+    #create L1, L2, and L3 files for scientific filters
     OIContData = None
     HIAContData = None
     CH4ContData = None
-    NH3ContData = None
     for f1, f2 in filePairs:
+        
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
         hdul2 = fits.open(PMpath+ '/unprocessed_L1/' + f2)
         
@@ -41,7 +52,7 @@ def process_L1Y(obskey="20250116UTa"):
         emissionArr = fits.ImageHDU(hp.avgData(4, hdul1, hdul2))
         #average radiance
        
-
+        #populates header
         hdul = fits.HDUList([hdu, lonArr, latArr, incidenceArr, emissionArr])
         hdr1, hdr2 = hdul1[0].header, hdul2[0].header
         hdul[0].header = hdul1[0].header
@@ -73,14 +84,15 @@ def process_L1Y(obskey="20250116UTa"):
         
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
+        #write L1 files
         fnout = hp.createL1FileName(f1, f2)
+       
         hdul.writeto(PMpath+ "/L1/" + fnout,overwrite=True)   
 
         fnout = hp.createL2FileName(f1, f2)
      
-        #print(repr(hdr))
-        
         hdul[0].data = hp.normalizeBrightness(hdu, emissionArr)
+
         #write l2 files
         if("OI" in fnout):
             OIContData = hdul[0].data
@@ -91,19 +103,16 @@ def process_L1Y(obskey="20250116UTa"):
             CH4ContData = hdul[0].data
         if("HIA" in fnout):
             HIAContData = hdul[0].data
-            
         if("NH3" in fnout):
             hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
             hdul[0].header["CALIBRAT"] = 0.964
-            NH3ContData = hdul[0].data
+    
         hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
 
         #write L3 files
 
         if("CH4" in fnout):
-            hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)
-            print(np.nanmax(hdul[0].data))
-           
+            hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)           
             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
             hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
         if("NH3" in fnout):
@@ -118,4 +127,3 @@ def process_L1Y(obskey="20250116UTa"):
 
 
     
-process_L1Y()
