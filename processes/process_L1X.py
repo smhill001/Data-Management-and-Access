@@ -12,7 +12,7 @@ def process_L1X(obskey):
     l1Files = os.listdir(path)
     obs_map = s.getL1AProcessingFiles(l1Files)
     
-    planetmapper.set_kernel_path('~/Jupiter/Data-Management-and-Access')
+   # planetmapper.set_kernel_path('~/Jupiter')
  
     #outputs fits into unprocessed_l1 file
     def createFits(file_list, camera_obs_list, obs):

@@ -1,0 +1,6 @@
+wcsinfo()
+wcsinfo("")
+help
+help procedures
+debug
+debug("FITS/Test/L1/2025-01-16-0043_0-Jupiter_632OI_L1Map.fits")
