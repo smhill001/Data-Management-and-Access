@@ -55,7 +55,7 @@ def process_L1Y(obskey, key):
         #populates header
         hdul = fits.HDUList([hdu, lonArr, latArr, incidenceArr, emissionArr])
         hdr1, hdr2 = hdul1[0].header, hdul2[0].header
-        hdul[0].header = hdul1[0].header
+        hdul[0].header = hdul1[0].header.copy()
         hdr = hdul[0].header
         hdr["DATE-OBS"] = hp.averageDates(hdr1["DATE-OBS"], hdr2["DATE-OBS"], "%Y-%m-%dT%H:%M:%S.%f")
         hp.averageCameraDates(hdr, hdr1, hdr2, "TimeStamp")
@@ -74,14 +74,14 @@ def process_L1Y(obskey, key):
         hp.averageCoors(hdr,hdr1,hdr2)
 
         hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP FrameCount")
-        hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LAT")
-        hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LON")
-        hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LAT")
-        hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LON")
-        hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP LIGHT-TIME")
-        hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP DISTANCE")
+        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LAT")
+        print(hdr["HIERARCH PLANMAP SUBPOINT LAT"])
+        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LON")
+        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LAT")
+        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LON")
+        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP LIGHT-TIME")
+        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP DISTANCE")
         key = "HIERARCH SHRPCAP Duration"
-        
         hdr[key] = str(round(float(hdr1[key][:-1]) + float(hdr2[key][:-1]), 3)) + 's'
 
         #write L1 files
@@ -108,6 +108,8 @@ def process_L1Y(obskey, key):
             hdul[0].header["CALIBRAT"] = 0.964
     
         hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
+        print(PMpath)
+        print(fnout)
 
         #write L3 files
 

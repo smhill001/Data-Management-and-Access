@@ -24,11 +24,11 @@ def batch_process(obskey):
     fileMap = s.getL1AProcessingFiles(l1Files)
     
   
-    px.process_L1X(obskey)
+    #px.process_L1X(obskey)
     for key in fileMap:
         py.process_L1Y(obskey, key) 
         
     
-batch_process("20251016UT")
+batch_process("20251017UT")
 
     

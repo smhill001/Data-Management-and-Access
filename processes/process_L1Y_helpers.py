@@ -86,15 +86,27 @@ def averageDates(datestr1, datestr2, format):
     return avgDate.strftime(format)
 
 def averageCameraDates(newHdr, hdr1, hdr2, key):
-
+    
     prefix = "HIERARCH SHRPCAP "
+    
     newHdr[prefix + key] = averageDates(hdr1[prefix + key], hdr2[prefix + key], "%Y-%m-%dT%H:%M:%S.%f") + "Z"
 
 def averageHdrNum(newHdr, hdr1, hdr2, key):
+ 
+    newHdr[key] = (hdr1[key] + hdr2[key]) / 2.0
     
-    newHdr[key] = (hdr1[key] + hdr2[key]) / 2
+    if(key == "HIERARCH PLANMAP SUBPOINT LAT"):
+        print("a:")
+        print(hdr1[key])
+        print("b:")
+        print(hdr2[key])
+        print("average:")
+        print(newHdr[key])
+        print((hdr1[key] + hdr2[key]) / 2.0)
+    
 
 def sumHdrNum(newHdr, hdr1, hdr2, key):
+ 
     newHdr[key] = hdr1[key] + hdr2[key]
 
 
@@ -104,6 +116,7 @@ def averageCoors(newHdr, hdr1, hdr2):
          Averages RA and Dec from headers and put both result into new header
          
     """
+
     ra1 = hdr1["HIERARCH SHRPCAP RA"]
     ra2 = hdr2["HIERARCH SHRPCAP RA"] 
     dec1 =  hdr1["HIERARCH SHRPCAP Dec"].split(' ')[0]
