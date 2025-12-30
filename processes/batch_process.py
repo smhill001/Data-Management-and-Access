@@ -2,6 +2,7 @@ import process_L1X as px
 import process_L1Y as py
 import os
 import solution as s
+from config import config
 
 
 def batch_process(obskey):
@@ -19,12 +20,13 @@ def batch_process(obskey):
     of ammonia mole fraction and cloud pressure
     '''
 
-    path="../Data_Samples/" + obskey
-    l1Files = os.listdir(path)
+    #path="../Data_Samples/" + obskey
+    input_path = config['input'] + obskey
+    l1Files = os.listdir(input_path)
     fileMap = s.getL1AProcessingFiles(l1Files)
+    output_path = config['output']
     
-  
-    #px.process_L1X(obskey)
+    px.process_L1X(obskey)
     for key in fileMap:
         py.process_L1Y(obskey, key) 
         
