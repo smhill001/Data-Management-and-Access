@@ -3,7 +3,7 @@ import os
 import sys
 First = True
 params = []
-def process_L1X(obskey):
+def process_L1X(obskey, output_path):
     sys.path.append('../processes')
     
     import solution as s     

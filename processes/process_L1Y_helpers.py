@@ -95,16 +95,6 @@ def averageHdrNum(newHdr, hdr1, hdr2, key):
  
     newHdr[key] = (hdr1[key] + hdr2[key]) / 2.0
     
-    if(key == "HIERARCH PLANMAP SUBPOINT LAT"):
-        print("a:")
-        print(hdr1[key])
-        print("b:")
-        print(hdr2[key])
-        print("average:")
-        print(newHdr[key])
-        print((hdr1[key] + hdr2[key]) / 2.0)
-    
-
 def sumHdrNum(newHdr, hdr1, hdr2, key):
  
     newHdr[key] = hdr1[key] + hdr2[key]
