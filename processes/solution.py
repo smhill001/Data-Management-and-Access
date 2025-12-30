@@ -526,7 +526,7 @@ def createHistogram(data, yearArr):
 
 
 
-with open('../Data_Samples/Catalog.json') as f:
+with open('./Data_Samples/Catalog.json') as f:
     d = json.load(f)
     """
     print()
@@ -541,11 +541,11 @@ with open('../Data_Samples/Catalog.json') as f:
     #print("get_info('20200720UTa', d)")
     #print(get_info('20200720UTa', d))
     
-l1Files = os.listdir("../Data_Samples/20250116UT")
-fwkw=filterByKeyword(getCameraObservations(l1Files), '685NIR')
+#l1Files = os.listdir("./Data_Samples/20250116UT")
+#fwkw=filterByKeyword(getCameraObservations(l1Files), '685NIR')
 #print(fwkw)
 
-labeledObservations=getCameraObservations(l1Files)
+#labeledObservations=getCameraObservations(l1Files)
 #print(labeledObservations, len(labeledObservations['data']))
 
 #print("Filter by Obs date '2025-01-16 05:00' to '2025-01-16 06:00'")

@@ -1,5 +1,5 @@
 config = {
-    'input': '../Data_Samples',
+    'input': 'Test_Data/Inputs',
     'output': '../FITS',
-    'test': True,
+    'test_mode': False,
 }
