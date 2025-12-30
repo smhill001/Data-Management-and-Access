@@ -3,16 +3,19 @@ import os
 import sys
 First = True
 params = []
-def process_L1X(obskey, output_path):
+def process_L1X(obskey, input_path, output_path):
     sys.path.append('../processes')
     
     import solution as s     
     
-    path="../Data_Samples/" + obskey + "/"
-    l1Files = os.listdir(path)
+    #path="../Data_Samples/" + obskey + "/"
+    #path = input_path + "/" + obskey + "/"
+    path = input_path + "/"
+    l1Files = os.listdir(input_path)
     obs_map = s.getL1AProcessingFiles(l1Files)
+   
     
-   # planetmapper.set_kernel_path('~/Jupiter')
+    planetmapper.set_kernel_path('~/Jupiter')
  
     #outputs fits into unprocessed_l1 file
     def createFits(file_list, camera_obs_list, obs):
@@ -80,7 +83,7 @@ def process_L1X(obskey, output_path):
                     value = pair[pair.index('=') + 1:]
                     observation.append_to_header("SHRPCAP " + key, formatType(value), hierarch_keyword=False)
         
-        dir_path = '../FITS/' + obskey + "/" + obs + "/unprocessed_L1/" 
+        dir_path = output_path + "/" + obskey + "/" + obs + "/unprocessed_L1/" 
         os.makedirs(dir_path, exist_ok = True)
         observation.save_observation(dir_path + "/" + fn.replace(".png",".fits"))
         observation.save_mapped_observation(dir_path + "/" + fn.replace(".png","map.fits"))

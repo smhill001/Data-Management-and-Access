@@ -21,14 +21,16 @@ def batch_process(obskey):
     '''
 
     #path="../Data_Samples/" + obskey
-    input_path = config['input'] + obskey
+    input_path = config['input'] + "/" + obskey
     l1Files = os.listdir(input_path)
     fileMap = s.getL1AProcessingFiles(l1Files)
     output_path = config['output']
     
-    px.process_L1X(obskey)
+    #px.process_L1X(obskey, input_path, output_path)
     for key in fileMap:
-        py.process_L1Y(obskey, key) 
+       py.process_L1Y(obskey, key, output_path) 
+
+
         
     
 batch_process("20251017UT")
