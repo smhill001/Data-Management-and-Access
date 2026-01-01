@@ -34,6 +34,6 @@ def batch_process(obskey):
 
         
     
-batch_process("20251017UT")
+batch_process("20251016UT")
 
     

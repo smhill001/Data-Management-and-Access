@@ -38,6 +38,13 @@ def process_L1Y(obskey, key,  output_path):
     OIContData = None
     HIAContData = None
     CH4ContData = None
+    ###########################################################################
+    #DEBUG
+    print()
+    print(filePairs)
+    print()
+    #DEBUG
+    ###########################################################################
     for f1, f2 in filePairs:
         
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)

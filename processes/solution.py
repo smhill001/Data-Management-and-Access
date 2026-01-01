@@ -526,7 +526,7 @@ def createHistogram(data, yearArr):
 
 
 
-with open('./Data_Samples/Catalog.json') as f:
+with open('../Test_Data/Inputs/Catalog.json') as f:
     d = json.load(f)
     """
     print()
