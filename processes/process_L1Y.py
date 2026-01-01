@@ -10,12 +10,12 @@ import process_L1Y_helpers as hp
 import cloud_pressure as cp
 
 
-def process_L1Y(obskey, key):
+def process_L1Y(obskey, key,  output_path):
 
     #set up file structure
 
 
-    PMpath='../FITS/' + obskey + "/" + key
+    PMpath= output_path + "/" + obskey + "/" + key
     os.makedirs(PMpath + "/L1", exist_ok=True)
     os.makedirs(PMpath + "/L2", exist_ok=True)
     os.makedirs(PMpath + "/L3", exist_ok=True)
@@ -75,7 +75,6 @@ def process_L1Y(obskey, key):
 
         hp.sumHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP FrameCount")
         hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LAT")
-        print(hdr["HIERARCH PLANMAP SUBPOINT LAT"])
         hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBPOINT LON")
         hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LAT")
         hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP SUBSOL LON")
@@ -108,8 +107,7 @@ def process_L1Y(obskey, key):
             hdul[0].header["CALIBRAT"] = 0.964
     
         hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 
-        print(PMpath)
-        print(fnout)
+       
 
         #write L3 files
 
