@@ -38,7 +38,7 @@ def computeAmmoniaMoleFraction(CH4data, NH3data):
     #  methane and ammonia respectively
     CH4_Ncol = 1000*CH4_tau/K_eff_CH4620 
     NH3_Ncol = 1000*NH3_tau/K_eff_NH3647
-    fNH3=fCH4*NH3_Ncol/CH4_Ncol
+    fNH3=fCH4*NH3_Ncol/CH4_Ncol*1.0e6 #units are ppm
     
     return fNH3
 

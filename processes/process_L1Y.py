@@ -38,13 +38,7 @@ def process_L1Y(obskey, key,  output_path):
     OIContData = None
     HIAContData = None
     CH4ContData = None
-    ###########################################################################
-    #DEBUG
-    print()
-    print(filePairs)
-    print()
-    #DEBUG
-    ###########################################################################
+
     for f1, f2 in filePairs:
         
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
@@ -121,11 +115,17 @@ def process_L1Y(obskey, key,  output_path):
         if("CH4" in fnout):
             hdul[0].data = cp.computeCloudPressure(CH4ContData, hdul[0].data)           
             hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
+            hdul[0].header["TELESCOP"] = "C11"
+            hdul[0].header["BUNIT"] = "Cloud-top Press"
+            hdul[0].header["FILENAME"]=fnout[:30] + "L3PCld_S0.fits"
             hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3PCld_S0.fits",overwrite=True) 
         if("NH3" in fnout):
              hdul[0].data = cp.computeAmmoniaMoleFraction(CH4ContData, hdul[0].data)
              hdul[0].header["HIERARCH KEFF CH4620"] = 0.427
              hdul[0].header["HIERARCH KEFF NH3647"] = 2.955
+             hdul[0].header["TELESCOP"] = "C11"
+             hdul[0].header["BUNIT"] = "Mole Fraction"
+             hdul[0].header["FILENAME"]=fnout[:30] + "L3fNH3_S0.fits"
              hdul.writeto(PMpath + "/L3/" + fnout[:30] + "L3fNH3_S0.fits",overwrite=True)
            
         hdul.close() 

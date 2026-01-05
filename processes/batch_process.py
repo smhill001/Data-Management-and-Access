@@ -5,7 +5,7 @@ import solution as s
 from config import config
 
 
-def batch_process(obskey):
+def batch_process(obskey,L1X=True,L1Y=True):
 
     '''
     Takes filter pngs of Jupiter and outputs mapped fits of
@@ -27,13 +27,15 @@ def batch_process(obskey):
     fileMap = s.getL1AProcessingFiles(l1Files)
     output_path =  'Test_Data/New_Results' if config['test_mode'] else config['output']
     
-    px.process_L1X(obskey, input_path, output_path)
-    for key in fileMap:
-       py.process_L1Y(obskey, key, output_path) 
+    if L1X:
+        px.process_L1X(obskey, input_path, output_path)
+    if L1Y:
+        for key in fileMap:
+           py.process_L1Y(obskey, key, output_path) 
 
 
         
     
-batch_process("20251016UT")
+#batch_process("20251016UT")
 
     
