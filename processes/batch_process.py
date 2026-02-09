@@ -23,7 +23,9 @@ def batch_process(obskey,L1X=True,L1Y=True):
     
     input_path =  'Test_Data/Inputs' if config['test_mode'] else config['input']
     input_path = input_path + "/" + obskey
+    print(input_path)
     l1Files = os.listdir(input_path)
+    print(l1Files)
     fileMap = s.getL1AProcessingFiles(l1Files)
     output_path =  'Test_Data/New_Results' if config['test_mode'] else config['output']
     

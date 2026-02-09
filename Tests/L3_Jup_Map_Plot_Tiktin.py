@@ -3,7 +3,7 @@ def L3_Jup_Map_Plot_Tiktin(obskey="20251016UTa",imagetype='Map',target="Jupiter"
                         CMpref='subobs',LonSys='2',showbands=False,
                         coef=[0.,0.],subproj='',figxy=[8.0,4.0],FiveMicron=False,
                         ROI=False,ctbls=["terrain_r","Blues"],
-                        LimbCorrection=False):
+                        LimbCorrection=False,pathin="C:/Astronomy/Projects/SAS 2021 Ammonia/Data-Management-and-Access/Test_Data/"):
     """
     Created on Sun Nov  6 16:47:21 2022
     
@@ -66,7 +66,8 @@ def L3_Jup_Map_Plot_Tiktin(obskey="20251016UTa",imagetype='Map',target="Jupiter"
                         RFT.read_fits_map_Tiktin(obskey=obskey,imagetype="Map",
                                                 target=target,Level="L3",
                                                 LonSys=LonSys,FiveMicron=FiveMicron,
-                                                LimbCorrection=LimbCorrection)
+                                                LimbCorrection=LimbCorrection,
+                                                pathin=pathin)
                         
         #PCldhdr,PClddata,fNH3hdr,fNH3data,sza,eza,RGB,RGB_CM,RGBtime= \
         #                RFM.read_fits_map_L2_L3(obskey=obskey,LonSys=LonSys,
@@ -126,7 +127,7 @@ def L3_Jup_Map_Plot_Tiktin(obskey="20251016UTa",imagetype='Map',target="Jupiter"
     ###########################################################################
     ## Just RGB and Abundance
     ###########################################################################
-    fNH3_patch_mb,TestfNH3,tx_fNH3,fnNH3=mac.map_and_context(fNH3data,fNH3hdr,
+    fNH3_patch_mb,TestfNH3,tx_fNH3,fnNH3,RGB4Display=mac.map_and_context(fNH3data,fNH3hdr,
                                                        RGB,RGBtime,
                                                        LonSys,LatLims,NH3LonLims,
                                                        LonRng,fNH3PlotCM,
@@ -141,7 +142,7 @@ def L3_Jup_Map_Plot_Tiktin(obskey="20251016UTa",imagetype='Map',target="Jupiter"
     ###########################################################################
     ## Just RGB and Cloud Pressure
     ###########################################################################
-    PCld_patch,TestPCld,tx_PCld,fnPCld=mac.map_and_context(PClddata,PCldhdr,
+    PCld_patch,TestPCld,tx_PCld,fnPCld,RGB4Display=mac.map_and_context(PClddata,PCldhdr,
                                                         RGB,RGBtime,
                                                         LonSys,LatLims,NH3LonLims,
                                                         LonRng,PCldPlotCM,
