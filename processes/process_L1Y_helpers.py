@@ -66,6 +66,8 @@ def getFilePairs(files):
         for file in files:
             if filter in file and "map.fits" in file:
                 filePair.append(file)
+        if len(filePair)==1:  ##!!!SMH handling of missing file in file pair
+            filePair.append(file)  ##!!!reuse the same file twice
         res.append(filePair)
     return res
 
