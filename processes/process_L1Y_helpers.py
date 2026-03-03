@@ -95,7 +95,7 @@ def averageCameraDates(newHdr, hdr1, hdr2, key):
 
 def averageHdrNum(newHdr, hdr1, hdr2, key):
  
-    newHdr[key] = (hdr1[key] + hdr2[key]) / 2.0
+    newHdr[key] = (float(hdr1[key]) + float(hdr2[key])) / 2.0 ## Hill 3/1/2026
     
 def sumHdrNum(newHdr, hdr1, hdr2, key):
  

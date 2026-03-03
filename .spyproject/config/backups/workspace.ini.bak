@@ -4,15 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-recent_files = ['processes\\process_L1X.py', 'processes\\solution.py', 'processes\\batch_process.py', 'processes\\config.py', 'processes\\process_L1Y.py', 'Tests\\FITS_tests.py', 'Tests\\L3_Jup_Map_Plot_Tiktin.py', '..\\Jupiter_NH3_Analysis_P3\\Maps\\PlanetMapper_Test.py', '..\\Jupiter_NH3_Analysis_P3\\Maps\\map_and_context.py', '..\\Visualization-and-Analysis\\L3_Jup_Map_Plot_Tiktin.py', '..\\Visualization-and-Analysis\\read_fits_Tiktin.py']
-=======
-recent_files = ['processes\\process_L1X.py', 'processes\\solution.py', 'processes\\process_L1Y.py', 'Tests\\FITS_tests.py', '..\\Jupiter_NH3_Analysis_P3\\Maps\\PlanetMapper_Test.py', 'processes\\process_L1Y_helpers.py', 'processes\\batch_process.py', 'processes\\config.py']
->>>>>>> Stashed changes
-=======
-recent_files = ['processes\\process_L1X.py', 'processes\\solution.py', 'processes\\process_L1Y.py', 'Tests\\FITS_tests.py', '..\\Jupiter_NH3_Analysis_P3\\Maps\\PlanetMapper_Test.py', 'processes\\process_L1Y_helpers.py', 'processes\\batch_process.py', 'processes\\config.py']
->>>>>>> Stashed changes
+recent_files = ['processes\\process_L1Y_helpers.py', 'processes\\batch_process.py', '..\\Jupiter_NH3_Analysis_P3\\Maps\\PlanetMapper_Test.py', 'processes\\solution.py', '..\\Jupiter_NH3_Analysis_P3\\Services\\make_L4_cont_maps.py', '..\\Visualization-and-Analysis\\L4_Jup_Map_Plot_V2.py', 'processes\\process_L1Y.py']
 
 [main]
 version = 0.2.0
