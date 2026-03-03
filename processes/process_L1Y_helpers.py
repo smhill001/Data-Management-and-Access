@@ -10,7 +10,9 @@ import astropy.units as u
 
 
 def getMethaneTransmission(methaneMap, contMap):
-
+    '''
+     Calculates strength of CH4 absorption by dividing CH4 band reflectance by continuoum(estimated from OI map) 
+    '''
     return np.array((methaneMap / contMap) * 0.897) 
 
 
@@ -19,6 +21,10 @@ def getNH3Calibration():
     return (647 - 632) / (656-632)
 
 def getNH3WaveContData(NH3Map, IOMap, HIAMap):
+    '''
+    Calculates NH3 absorption by dividing NH3 band reflectance by NH3 continuoum(estimated from HIA and OI maps), accounting for calibration factor
+    
+    '''
      #(1-X)R632+X*R656), where X=(647 – 632)/(656 – 632) 
     x = (647 - 632) / (656-632)
     a = (1-x) * (IOMap)

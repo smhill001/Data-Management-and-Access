@@ -526,8 +526,8 @@ def createHistogram(data, yearArr):
 
 
 
-with open('../Test_Data/Inputs/Catalog.json') as f:
-    d = json.load(f)
+#with open('../Test_Data/Inputs/Catalog.json') as f:
+ #   d = json.load(f)
     """
     print()
     print("getAllBetweenDates(d, '2025-01-16', '2025-01-16'")

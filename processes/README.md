@@ -4,7 +4,12 @@ This project is an automated data pipeline to convert raw png photos from the te
 
 #Getting Started
 
-This project requires planetmapper and spice kernels to be installed
+This project requires planetmapper and spice kernels to be installed. The path to the spice kernels may need to be specified in ProcessL1X using 
+
+```
+planetmapper.set_kernel_path()
+
+```
 
 #Usage
 
