@@ -5,6 +5,27 @@ import sys
 First = True
 params = []
 def process_L1X(obskey, input_path, output_path):
+    '''
+    Purpose
+    ---------
+    Creates and populates an output directory with unprocessed L1 fits files for each observation for one date
+
+    Parameters
+    ----------
+
+    input_path REQUIRED
+    DESCRIPTION: directory with input files 
+
+    output_path REQUIRED
+    DESCRIPTION: parent directory for obskey output directory
+
+    obskey REQUIRED
+    DESCRIPTION: date key for observations to be processed
+    FORMAT: YYYYMMDDUT
+
+    RETURNS NONE
+
+    '''
     sys.path.append('../processes')
     
     import solution as s     
