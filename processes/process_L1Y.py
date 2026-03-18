@@ -11,10 +11,32 @@ import cloud_pressure as cp
 
 
 def process_L1Y(obskey, key,  output_path):
+    '''
+    populates output directory with L1, L2, and L3 fits files for a single observation
+
+    Parameters
+    -----------
+
+    output_path REQUIRED
+    DESCRIPTION: path to parent directory of obskey directory. The obskey directory
+    must already exist and be populated with unprocessed_l1 files(through running process_L1X)
+
+    
+    obskey REQUIRED
+    DESCRIPTION: date key for observation
+    FORMAT: YYYYMMDDUT
+
+    key REQUIRED
+    DESCRIPTION: specific key for observation
+    FORMAT: YYYYMMDDUT{a-z}
+
+    RETURNS NONE
+
+
+    '''
+
 
     #set up file structure
-
-
     PMpath= output_path + "/" + obskey + "/" + key
     os.makedirs(PMpath + "/L1", exist_ok=True)
     os.makedirs(PMpath + "/L2", exist_ok=True)
