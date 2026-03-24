@@ -24,17 +24,30 @@ def batch_process(obskey,L1X=True,L1Y=True):
     input_path =  'Test_Data/Inputs' if config['test_mode'] else config['input']
     input_path = input_path + "/" + obskey
     print(input_path)
+    print()
     l1Files = os.listdir(input_path)
     print(l1Files)
+    print("############ in Batch before getL1AProcessingFiles")
+
     fileMap = s.getL1AProcessingFiles(l1Files)
+    print('############ fileMap')
+    print(fileMap)
+    print()
+
+    """
     output_path =  'Test_Data/New_Results' if config['test_mode'] else config['output']
     
     if L1X:
+        print("L1XL1XL1XL1XL1XL1XL1XL1XL1XL1X")
+        print(obskey)
         px.process_L1X(obskey, input_path, output_path)
     if L1Y:
         for key in fileMap:
            py.process_L1Y(obskey, key, output_path) 
-
+           
+    print(input_path)
+    print(output_path)
+    """
 
         
     

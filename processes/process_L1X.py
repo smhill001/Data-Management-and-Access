@@ -13,7 +13,8 @@ def process_L1X(obskey, input_path, output_path):
     path = input_path + "/"
     l1Files = os.listdir(input_path)
     obs_map = s.getL1AProcessingFiles(l1Files)
-   
+    print("In L1X In L1X In L1X In L1X In L1X In L1X ")
+    print(obs_map)
     
     planetmapper.set_kernel_path('~/Jupiter')
  

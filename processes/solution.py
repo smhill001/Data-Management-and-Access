@@ -296,11 +296,13 @@ def getCameraObservations(files):
     Object: data: camera.txt files sorted into observations and assigned obskeys
             incomplete: list of incomplete observations
     """
-    #print('sorting files by date')
+    print('sorting files by date')
     sortedFiles = sortFilesByDate(getLAFiles(files, isCameraFile))
-    #print('sorting into observations')
+    print(sortedFiles)
+    print('sorting into observations')
     observations = sortIntoObservations(sortedFiles)
-    #print('labeling observations')
+    print(observations)
+    print('labeling observations')
     labeledObservations = labelObservations(observations)
     return labeledObservations
 
@@ -354,9 +356,11 @@ def getL1AProcessingFiles(files):
     
     """
     cameraObservations = getCameraObservations(files)["data"]
+    print("######### cameraObservations=",cameraObservations,"###########")
+    print("#########")
     sortedFiles = sortFilesByDate(getLAFiles(files, isProcessingFile))
     observations = sortIntoExtendedObservations(sortedFiles, cameraObservations)
-    #print(observations)
+    print(observations)
     return observations
     
 def isCameraFile(file):
