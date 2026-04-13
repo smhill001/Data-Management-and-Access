@@ -221,7 +221,7 @@ def sortIntoObservations(files):
             obs.append(files[i])
             fileOrder.pop()
             i += 1
-       
+    res.append(obs)
     return res
 
 #get by end date?
