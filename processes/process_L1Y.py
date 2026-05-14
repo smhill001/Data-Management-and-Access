@@ -38,7 +38,6 @@ def process_L1Y(obskey, key,  output_path):
     OIContData = None
     HIAContData = None
     CH4ContData = None
-
     for f1, f2 in filePairs:
         
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
@@ -69,8 +68,8 @@ def process_L1Y(obskey, key,  output_path):
         hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH PLANMAP ET-OBS")
         prefix = "HIERARCH PLANMAP "
         hdr[prefix + "UTC-OBS"] = hp.averageDates(hdr1[prefix + "UTC-OBS"], hdr2[prefix + "UTC-OBS"], "%Y-%m-%dT%H:%M:%S.%f")
-       
-        hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Focuser Temperature")
+        if hdr["HIERARCH SHRPCAP JDMidCapture"]>2460938.0: # SMH 5/1/2026 for addition of EAF focuser
+            hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Focuser Temperature")
         hp.averageHdrNum(hdr, hdr1, hdr2, "HIERARCH SHRPCAP Temperature")
         hp.averageCoors(hdr,hdr1,hdr2)
 
