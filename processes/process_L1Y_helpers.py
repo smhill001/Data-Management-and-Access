@@ -27,6 +27,7 @@ def getNH3WaveContData(NH3Map, IOMap, HIAMap):
     #b = (1-x) * HIAMap
    
     return 0.964*NH3Map / (a + b)
+    #return 0.964*NH3Map / IOMap
    
 def getColorFiles(files):
     """

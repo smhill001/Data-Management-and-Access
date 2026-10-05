@@ -3,7 +3,7 @@ import process_L1Y as py
 import os
 import solution as s
 from config import config
-
+os.chdir('C:/Astronomy/Projects/SAS 2021 Ammonia/Data-Management-and-Access')
 
 def batch_process(obskey,L1X=True,L1Y=True):
 
