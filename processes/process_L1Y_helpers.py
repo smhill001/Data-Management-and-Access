@@ -18,16 +18,20 @@ def getMethaneTransmission(methaneMap, contMap):
 def getNH3Calibration():
     return (647 - 632) / (656-632)
 
-def getNH3WaveContData(NH3Map, IOMap, HIAMap):
+def getNH3WaveContData(NH3Map, IOMap, processing_mode="656HIA",HIAMap=None,):
      #(1-X)R632+X*R656), where X=(647 – 632)/(656 – 632) 
-    x = (647 - 632) / (656-632)
-    a = (1-x) * (IOMap)
-    b = x * HIAMap
     #a = (x) * (IOMap)
     #b = (1-x) * HIAMap
    
-    return 0.964*NH3Map / (a + b)
-    #return 0.964*NH3Map / IOMap
+    if processing_mode=="656HIA":
+        x = (647 - 632) / (656-632)
+        a = (1-x) * (IOMap)
+        b = x * HIAMap
+        return 0.964*NH3Map / (a + b)
+    elif processing_mode=="889CH4":
+        print(NH3Map.size)
+        print(IOMap.size)
+        return 0.964* (NH3Map / IOMap)
    
 def getColorFiles(files):
     """
@@ -49,7 +53,7 @@ def getColorFiles(files):
 
 
 
-def getFilePairs(files):
+def getFilePairs(files,processing_mode="656HIA"):
     """
          Gets pairs of scientific files for each filter
 
@@ -58,7 +62,10 @@ def getFilePairs(files):
          Returns:
          Array[Array[string]]: list of file name pairs
     """
-    science_filters = ['HIA', 'OI', 'CH4', 'NH3']
+    if processing_mode=="656HIA":
+        science_filters = ['656HIA', '632OI', '620CH4', '647NH3']
+    elif processing_mode=="889CH4":
+        science_filters = ['632OI', '620CH4', '647NH3']
     
     
     res = []
