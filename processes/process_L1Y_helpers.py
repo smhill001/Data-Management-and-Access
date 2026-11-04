@@ -33,7 +33,7 @@ def getNH3WaveContData(NH3Map, IOMap, processing_mode="656HIA",HIAMap=None,):
         print(IOMap.size)
         return 0.964* (NH3Map / IOMap)
    
-def getColorFiles(files):
+def getColorFiles(files,processing_mode="656HIA"):
     """
          Gets the mapped color file for each filter
 
@@ -42,7 +42,11 @@ def getColorFiles(files):
          Returns:
          Array[string]: list of file names
     """
-    color_filters = ['NIR', 'GRN', 'BLU']
+    if processing_mode=="656HIA":
+        color_filters = ['NIR', 'GRN', 'BLU']
+    elif processing_mode=="889CH4":
+        color_filters = ['NIR', 'GRN', 'BLU','889CH4']
+
     res = []
     for filter in color_filters:
         for file in files:

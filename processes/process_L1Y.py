@@ -22,7 +22,7 @@ def process_L1Y(obskey, key,  output_path,processing_mode="656HIA"):
 
     files = os.listdir(PMpath + "/unprocessed_L1")
     filePairs = hp.getFilePairs(files,processing_mode=processing_mode)
-    colorFiles = hp.getColorFiles(files)
+    colorFiles = hp.getColorFiles(files,processing_mode=processing_mode)
 
 
     #create L1 and L2 fits files for rgb filters
