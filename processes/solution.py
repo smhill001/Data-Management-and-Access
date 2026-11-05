@@ -208,6 +208,7 @@ def sortIntoObservations(files,processing_mode='889CH4'):
     #processing_mode='889CH4'
     print("###### in sortIntoObservations - processing_mode ",processing_mode)
     print(len(files))
+    #return
     i = 0
     while i < len(files):
         obs = []
@@ -215,6 +216,13 @@ def sortIntoObservations(files,processing_mode='889CH4'):
             fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
         if processing_mode=="889CH4":
             fileOrder = ['450', '550', '685', '889', '632', '620', '647', '647', '620',  '632']
+            print(files)
+            if not any("889CH4" in s for s in files):
+                fileOrder=['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
+        #print("*****************************************")
+        #print("i, fileOrder=",i,fileOrder)
+        #print("*****************************************")
+        #return
         while(i < len(files)):
             while len(fileOrder) and (
                 not '_' + fileOrder[-1] in files[i]
@@ -281,6 +289,9 @@ def labelObservations(observations,processing_mode='889CH4'):
     incomplete property with obskeys with incomplete file arrays
     
     """
+    print("------------------------------------")
+    print("len(observations)=",len(observations))
+    print("------------------------------------")
     sz={'656HIA':11,'889CH4':11}
     labeledObs = {}
     incompleteObs = []
