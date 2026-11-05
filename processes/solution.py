@@ -194,7 +194,7 @@ def get_info(obskey, data):
 
 
 
-def sortIntoObservations(files):
+def sortIntoObservations(files,processing_mode='889CH4'):
     """
     organizes list of L1A filenames into observations
 
@@ -205,10 +205,24 @@ def sortIntoObservations(files):
     
     """
     res = []
+    #processing_mode='889CH4'
+    print("###### in sortIntoObservations - processing_mode ",processing_mode)
+    print(len(files))
+    #return
     i = 0
     while i < len(files):
         obs = []
-        fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
+        if processing_mode=="656HIA":
+            fileOrder = ['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
+        if processing_mode=="889CH4":
+            fileOrder = ['450', '550', '685', '889', '632', '620', '647', '647', '620',  '632']
+            print(files)
+            if not any("889CH4" in s for s in files):
+                fileOrder=['450', '550', '685', '656', '632', '620', '647', '647', '620',  '632', '656']
+        #print("*****************************************")
+        #print("i, fileOrder=",i,fileOrder)
+        #print("*****************************************")
+        #return
         while(i < len(files)):
             while len(fileOrder) and (
                 not '_' + fileOrder[-1] in files[i]
@@ -264,7 +278,7 @@ def filterByKeyword(data, keyword):
 
    
 #generates obskeys for each observation
-def labelObservations(observations):
+def labelObservations(observations,processing_mode='889CH4'):
 
     """
     Builds object with obskeys for observations and identifies incomplete obskeys
@@ -275,19 +289,24 @@ def labelObservations(observations):
     incomplete property with obskeys with incomplete file arrays
     
     """
+    print("------------------------------------")
+    print("len(observations)=",len(observations))
+    print("------------------------------------")
+    sz={'656HIA':11,'889CH4':11}
     labeledObs = {}
     incompleteObs = []
     for index, obs in enumerate(observations):
-        label = obs[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
+        label = obs[0][:sz[processing_mode]-1].replace("-","") + "UT" + chr(ord('a') + index)
+        #label = obs[0][:10].replace("-","") + "UT" + chr(ord('a') + index)
         labeledObs[label] = obs
-        if len(obs) < 11:
+        if len(obs) < sz[processing_mode]: #11:
             incompleteObs.append(label)
     
     return {"data": labeledObs, "incomplete": incompleteObs}
 
 
 #get camera.txt
-def getCameraObservations(files):
+def getCameraObservations(files,processing_mode='656HIA'):
     """
     gets object with camera files sorted into observations
     Parameters:
@@ -298,12 +317,20 @@ def getCameraObservations(files):
     """
     print('sorting files by date')
     sortedFiles = sortFilesByDate(getLAFiles(files, isCameraFile))
-    print(sortedFiles)
-    print('sorting into observations')
-    observations = sortIntoObservations(sortedFiles)
+    #print(sortedFiles)
+    print()
+    print('getCameraObservations - sorting into observations - processing_mode ',processing_mode)
+    print()
+    observations = sortIntoObservations(sortedFiles,processing_mode=processing_mode)
     print(observations)
     print('labeling observations')
     labeledObservations = labelObservations(observations)
+    print()
+    print('done with labeling observations')
+    print()
+    print(labeledObservations)
+    print()
+    print("##########")
     return labeledObservations
 
 
@@ -343,7 +370,7 @@ def sortIntoExtendedObservations(files, cameraFiles):
 
         
 #gets files for processing from camera files
-def getL1AProcessingFiles(files):
+def getL1AProcessingFiles(files,processing_mode='656HIA'):
     """
     Gets L1A filenames needed for processing using camera observations
     Parameters:
@@ -355,11 +382,18 @@ def getL1AProcessingFiles(files):
         
     
     """
-    cameraObservations = getCameraObservations(files)["data"]
+    
+    print("in getL1AProcessingFiles - processing_mode ",processing_mode)
+    cameraObservations = getCameraObservations(files,processing_mode=processing_mode)["data"]
+    print()
     print("######### cameraObservations=",cameraObservations,"###########")
+    print()
     print("#########")
     sortedFiles = sortFilesByDate(getLAFiles(files, isProcessingFile))
+    print("#########")
+    #print("SORTED FILES: ",sortedFiles)
     observations = sortIntoExtendedObservations(sortedFiles, cameraObservations)
+    print()
     print(observations)
     return observations
     
@@ -404,6 +438,7 @@ def getLAFiles(files, selector):
     """
     selectedFiles = []
     for file in files:
+        #print("in GetLAFiles - file, selector(file) ",file,selector(file))
         if selector(file):
             selectedFiles.append(file)
     return selectedFiles
@@ -424,7 +459,7 @@ def sortFilesByDate(files):
 
 
 #creates json file with incomplete property for keys with missing files
-def obsToJSON(files):
+def obsToJSON(files,processing_mode='656HIA'):
     """
     Side Effect: loads object with camera observations into a json 
     -data property with list of obskeys and their files array
@@ -433,7 +468,7 @@ def obsToJSON(files):
 
     """
     with open('../observations.json', 'w', encoding='utf-8') as f:
-        json.dump(getCameraObservations(files), f, ensure_ascii=False, indent=4)
+        json.dump(getCameraObservations(files,processing_mode=processing_mode), f, ensure_ascii=False, indent=4)
     
 #obsToJSON()
 #getL1AProcessingFiles(l1Files)

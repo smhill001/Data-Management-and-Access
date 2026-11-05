@@ -10,7 +10,7 @@ import process_L1Y_helpers as hp
 import cloud_pressure as cp
 
 
-def process_L1Y(obskey, key,  output_path):
+def process_L1Y(obskey, key,  output_path,processing_mode="656HIA"):
 
     #set up file structure
 
@@ -21,8 +21,8 @@ def process_L1Y(obskey, key,  output_path):
     os.makedirs(PMpath + "/L3", exist_ok=True)
 
     files = os.listdir(PMpath + "/unprocessed_L1")
-    filePairs = hp.getFilePairs(files)
-    colorFiles = hp.getColorFiles(files)
+    filePairs = hp.getFilePairs(files,processing_mode=processing_mode)
+    colorFiles = hp.getColorFiles(files,processing_mode=processing_mode)
 
 
     #create L1 and L2 fits files for rgb filters
@@ -38,6 +38,7 @@ def process_L1Y(obskey, key,  output_path):
     OIContData = None
     HIAContData = None
     CH4ContData = None
+    print("@@@@@@@@ filePairs=",filePairs)
     for f1, f2 in filePairs:
         
         hdul1 = fits.open(PMpath+ '/unprocessed_L1/' + f1)
@@ -97,13 +98,20 @@ def process_L1Y(obskey, key,  output_path):
             OIContData = hdul[0].data
             
         if("CH4" in fnout):
+            print("Hello")
+            print(OIContData.size)
+            print(hdul[0].data.size)
+            print("Hello")
+
             hdul[0].data = hp.getMethaneTransmission(hdul[0].data,OIContData )
             hdul[0].header["CALIBRAT"] = 0.897
             CH4ContData = hdul[0].data
         if("HIA" in fnout):
             HIAContData = hdul[0].data
         if("NH3" in fnout):
-            hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, HIAContData)
+            hdul[0].data = hp.getNH3WaveContData(hdul[0].data, OIContData, 
+                                                 processing_mode=processing_mode,
+                                                 HIAMap=HIAContData)
             hdul[0].header["CALIBRAT"] = 0.964
     
         hdul.writeto(PMpath + "/L2/" + fnout,overwrite=True) 

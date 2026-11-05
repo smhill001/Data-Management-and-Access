@@ -3,18 +3,43 @@ import os
 import sys
 First = True
 params = []
-def process_L1X(obskey, input_path, output_path):
+def process_L1X(obskey, input_path, output_path,processing_mode="656HIA"):
+    
+    '''
+    Purpose
+    ---------
+    Creates and populates an output directory with unprocessed L1 fits files for each observation for one date
+    
+    Parameters
+    ----------
+    
+    input_path REQUIRED
+    DESCRIPTION: directory with input files 
+    
+    output_path REQUIRED
+    DESCRIPTION: parent directory for obskey output directory
+    
+    obskey REQUIRED
+    DESCRIPTION: date key for observations to be processed
+    FORMAT: YYYYMMDDUT
+    
+    RETURNS NONE
+    
+    '''
+    
     sys.path.append('../processes')
     
     import solution as s     
     
     #path="../Data_Samples/" + obskey + "/"
     #path = input_path + "/" + obskey + "/"
-    path = input_path + "/"
-    l1Files = os.listdir(input_path)
-    obs_map = s.getL1AProcessingFiles(l1Files)
     print("In L1X In L1X In L1X In L1X In L1X In L1X ")
-    print(obs_map)
+    path = input_path + "/"
+    print(input_path)
+    l1Files = os.listdir(input_path)
+    print("in L1X - processing_mode ",processing_mode)
+    obs_map = s.getL1AProcessingFiles(l1Files,processing_mode=processing_mode)
+    print("in L1X - obs_map ",obs_map)
     
     planetmapper.set_kernel_path('~/Jupiter')
  
@@ -94,7 +119,7 @@ def process_L1X(obskey, input_path, output_path):
     #creates fits files for each observation
     for obs in obs_map:
         file_list = obs_map[obs]
-        camera_obs_list = s.getCameraObservations(l1Files)["data"][obs]
+        camera_obs_list = s.getCameraObservations(l1Files,processing_mode=processing_mode)["data"][obs]
         createFits(file_list, camera_obs_list,obs)
         First = False
        
